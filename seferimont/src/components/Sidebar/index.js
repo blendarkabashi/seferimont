@@ -10,13 +10,14 @@ import {
   ArrowLeftOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import { classNames } from "src/global/functions";
+import Link from "next/link";
 const Header = ({ sidebarOpen, setSidebarOpen }) => {
   const router = useRouter();
 
   const navigation = [
-    { name: "Kryefaqja", href: "#", icon: HomeIcon, current: true },
-    { name: "Klientet", href: "#", icon: UsersIcon, current: false },
-    { name: "Faturat", href: "#", icon: DocumentDuplicateIcon, current: false },
+    { name: "Kryefaqja", href: "/kryefaqja", icon: HomeIcon, current: true },
+    { name: "Klientet", href: "/klientet", icon: UsersIcon, current: false },
+    { name: "Faturat", href: "/faturat", icon: DocumentDuplicateIcon, current: false },
   ];
   const teams = [
     { id: 1, name: "Heroicons", href: "#", initial: "H", current: false },
@@ -81,10 +82,10 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
                         <ul role="list" className="-mx-2 space-y-1">
                           {navigation.map((item) => (
                             <li key={item.name}>
-                              <a
+                              <Link
                                 href={item.href}
                                 className={classNames(
-                                  item.current
+                                  router.asPath === item.href
                                     ? "bg-gray-800 text-white"
                                     : "text-gray-400 hover:text-white hover:bg-gray-800",
                                   "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
@@ -92,7 +93,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
                               >
                                 <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
                                 {item.name}
-                              </a>
+                              </Link>
                             </li>
                           ))}
                         </ul>
@@ -159,7 +160,9 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
                       <a
                         href={item.href}
                         className={classNames(
-                          item.current ? "bg-gray-800 text-white" : "text-gray-400 hover:text-white hover:bg-gray-800",
+                          router.asPath == item.href
+                            ? "bg-gray-800 text-white"
+                            : "text-gray-400 hover:text-white hover:bg-gray-800",
                           "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                         )}
                       >

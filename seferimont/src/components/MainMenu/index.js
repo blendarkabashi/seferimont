@@ -2,12 +2,10 @@ import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { classNames } from "src/global/functions";
 import { Bars3Icon, BellIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
+import { DocumentDuplicateIcon, UsersIcon } from "@heroicons/react/24/outline";
 
 const MainMenu = ({ setSidebarOpen }) => {
-  const userNavigation = [
-    { name: "Your profile", href: "#" },
-    { name: "Sign out", href: "#" },
-  ];
+  const userNavigation = [{ name: "Dil nga aplikacioni", href: "#" }];
   return (
     <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
       <button type="button" className="-m-2.5 p-2.5 text-gray-700 lg:hidden" onClick={() => setSidebarOpen(true)}>
@@ -36,10 +34,26 @@ const MainMenu = ({ setSidebarOpen }) => {
                 />
               </form> */}
         <div className="flex items-center gap-x-4 lg:gap-x-6">
-          <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
+          {/* <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
             <span className="sr-only">View notifications</span>
             <BellIcon className="h-6 w-6" aria-hidden="true" />
-          </button>
+          </button> */}
+          <div className="sm:flex hidden justify-end">
+            <a
+              href="#"
+              className="mr-4 flex items-center gap-x-1 rounded-md border bg-[#111827] text-white px-3 py-2 text-sm font-semibold shadow-sm"
+            >
+              <UsersIcon className="-ml-1.5 h-5 w-5 text-white" aria-hidden="true" />
+              Shto Klientin
+            </a>
+            <a
+              href="#"
+              className="flex items-center gap-x-1 rounded-md border bg-[#111827] text-white px-3 py-2 text-sm font-semibold shadow-sm"
+            >
+              <DocumentDuplicateIcon className="-ml-1.5 h-5 w-5 text-white" aria-hidden="true" />
+              Shto Faturen
+            </a>
+          </div>
 
           {/* Separator */}
           <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true" />
@@ -69,7 +83,7 @@ const MainMenu = ({ setSidebarOpen }) => {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+              <Menu.Items className="absolute right-0 z-10 mt-2.5 w-36 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                 {userNavigation.map((item) => (
                   <Menu.Item key={item.name}>
                     {({ active }) => (

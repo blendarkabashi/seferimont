@@ -1,19 +1,6 @@
-import { Fragment } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import { classNames } from "src/global/functions";
-import { Bars3Icon, BellIcon, DocumentDuplicateIcon, UsersIcon } from "@heroicons/react/24/outline";
-import {
-  ArrowDownCircleIcon,
-  ArrowPathIcon,
-  ArrowUpCircleIcon,
-  EllipsisHorizontalIcon,
-} from "@heroicons/react/20/solid";
-import { useState } from "react";
-import Sidebar from "src/components/Sidebar";
-import MainMenu from "src/components/MainMenu";
 import Stats from "src/components/Stats";
 import RecentClients from "src/components/RecentClients";
-
+import { UsersIcon, DocumentDuplicateIcon } from "@heroicons/react/20/solid";
 const stats = [
   { name: "Totali", value: "€405,091.00" },
   { name: "Fatura te papaguara", value: "€12,787.00" },
@@ -41,37 +28,31 @@ const clients = [
 ];
 
 export default function Kryefaqja() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <>
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <div>
-        <div className="lg:pl-72">
-          <MainMenu setSidebarOpen={setSidebarOpen}></MainMenu>
-          <main className="">
-            <div className="">
-              <Stats stats={stats} />
-              <div className="flex justify-end py-6 px-8">
-                <a
-                  href="#"
-                  className="mr-4 flex items-center gap-x-1 rounded-md border bg-[#111827] text-white px-3 py-2 text-sm font-semibold shadow-sm"
-                >
-                  <UsersIcon className="-ml-1.5 h-5 w-5 text-white" aria-hidden="true" />
-                  Shto Klientin
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center gap-x-1 rounded-md border bg-[#111827] text-white px-3 py-2 text-sm font-semibold shadow-sm"
-                >
-                  <DocumentDuplicateIcon className="-ml-1.5 h-5 w-5 text-white" aria-hidden="true" />
-                  Shto Faturen
-                </a>
-              </div>
-              <div className="space-y-16 xl:space-y-20">
-                {/* RecentClients */}
-                <RecentClients clients={clients} />
-                {/* Table  */}
-                {/* <div>
+      <div className="">
+        <Stats stats={stats} />
+        <div className="pt-8 sm:hidden flex px-4">
+          <a
+            href="#"
+            className=" min-h-[50px] justify-center w-full mr-4 flex items-center gap-x-1 rounded-md border bg-[#111827] text-white px-3 py-2 text-sm font-semibold shadow-sm"
+          >
+            <UsersIcon className="-ml-1.5 h-5 w-5 text-white" aria-hidden="true" />
+            Shto Klientin
+          </a>
+          <a
+            href="#"
+            className=" min-h-[50px] justify-center w-full flex items-center gap-x-1 rounded-md border bg-[#111827] text-white px-3 py-2 text-sm font-semibold shadow-sm"
+          >
+            <DocumentDuplicateIcon className="-ml-1.5 h-5 w-5 text-white" aria-hidden="true" />
+            Shto Faturen
+          </a>
+        </div>
+        <div className="space-y-16 pt-6 xl:space-y-20">
+          {/* RecentClients */}
+          <RecentClients clients={clients} />
+          {/* Table  */}
+          {/* <div>
                   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <h2 className="mx-auto max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">
                       Recent activity
@@ -158,9 +139,6 @@ export default function Kryefaqja() {
                     </div>
                   </div>
                 </div> */}
-              </div>
-            </div>
-          </main>
         </div>
       </div>
     </>

@@ -50,7 +50,7 @@ const RecentClients = ({ clients }) => {
                               "block px-3 py-1 text-sm leading-6 text-gray-900"
                             )}
                           >
-                            Shiko ne detaje<span className="sr-only">, {client.name}</span>
+                            Shiko detajet<span className="sr-only">, {client.name}</span>
                           </a>
                         )}
                       </Menu.Item>

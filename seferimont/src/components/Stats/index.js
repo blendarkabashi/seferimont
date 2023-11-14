@@ -11,7 +11,7 @@ const Stats = ({ stats }) => {
               key={stat.name}
               className={classNames(
                 statIdx % 2 === 1 ? "sm:border-l" : statIdx === 2 ? "lg:border-l" : "",
-                "flex items-baseline flex-wrap justify-between gap-y-0 gap-x-4 border-t border-gray-900/5 px-2 py-4 sm:px-6 lg:border-t-0 xl:px-6"
+                "flex items-baseline flex-wrap justify-between gap-y-0 gap-x-4 border-t border-gray-900/5 px-4 py-4 sm:px-6 lg:border-t-0 xl:px-6"
               )}
             >
               <dt className="text-sm font-medium leading-6 text-gray-500">{stat.name}</dt>
