@@ -1,14 +1,17 @@
-const { createSlice } = require('@reduxjs/toolkit');
+const { createSlice } = require("@reduxjs/toolkit");
 
 let isUserAuthenticated = false;
-if (typeof window !== 'undefined') {
-  isUserAuthenticated = localStorage.getItem('user') ? true : false;
+let user = null;
+if (typeof window !== "undefined") {
+  isUserAuthenticated = localStorage.getItem("user") ? true : false;
+  user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
+  console.log(JSON.parse(localStorage.getItem("user")));
 }
 const global = createSlice({
-  name: 'global',
+  name: "global",
   initialState: {
     isAuthenticated: isUserAuthenticated,
-    user: [],
+    user: user,
   },
   reducers: {
     setIsAuthenticated(state, action) {
@@ -19,9 +22,9 @@ const global = createSlice({
     },
     logout(state) {
       state.isAuthenticated = false;
-      state.user = [];
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('user');
+      state.user = null;
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("user");
       }
     },
   },

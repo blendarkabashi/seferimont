@@ -4,24 +4,39 @@ import { useState } from 'react';
  import axios from 'axios';
  import { useDispatch } from 'react-redux';
 import { setUser } from 'src/store/global';
+import Button from 'src/components/Button';
+import toast from 'react-hot-toast';
 
 export default function Home() {
+
   const dispatch = useDispatch()
   const router = useRouter()
   const [identifier, setIdentifier] = useState()
   const [password, setPassword] = useState()
+  const [loading, setLoading] = useState(false)
   const handleSubmit = async(e) => {
     e.preventDefault()
-     try {
+    try {
+       setLoading(true)
        const response = await axios.post('http://localhost:1337/api/auth/local', {
          identifier: identifier,
          password: password,
        });
+       setLoading(false)
        dispatch(setUser(response.data.user))
-       localStorage.setItem('user', response.data.user)
+
+       let {user, jwt} = response.data
+       localStorage.setItem('user', JSON.stringify(user))
+       localStorage.setItem('token', jwt)
+
+       axios.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
+       toast.success('Jeni kycur me sukses!')
        router.push('/kryefaqja')
      } catch (error) {
-       console.log(error);
+      toast.error(error.response.data.error.message)
+     }
+     finally{
+       setLoading(false)
      }
   }
   return (
@@ -52,7 +67,7 @@ export default function Home() {
           </div>
 
           <div>
-            <button onClick={handleSubmit} className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Kycu</button>
+            <Button onClick={handleSubmit} loading={loading} label="Kycu" />
           </div>
         </form>
 

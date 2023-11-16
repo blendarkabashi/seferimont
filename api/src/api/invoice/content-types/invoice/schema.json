@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "invoices",
+  "info": {
+    "singularName": "invoice",
+    "pluralName": "invoices",
+    "displayName": "Invoices"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "invoice_id": {
+      "type": "uid"
+    },
+    "invoice_total": {
+      "type": "decimal"
+    },
+    "invoice_unpaid": {
+      "type": "decimal"
+    },
+    "invoice_paid": {
+      "type": "decimal"
+    },
+    "description": {
+      "type": "text"
+    },
+    "invoice_due": {
+      "type": "datetime"
+    }
+  }
+}
