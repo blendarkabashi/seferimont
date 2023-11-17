@@ -4,7 +4,10 @@ import { useRouter } from "next/router";
 import { Provider } from "react-redux"; // Import Provider
 import store from "src/store";
 import { Toaster } from "react-hot-toast";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import { initializeAxiosInterceptor } from "src/api/axios";
 // This is your custom App component
+initializeAxiosInterceptor();
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   return (

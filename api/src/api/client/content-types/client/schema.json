@@ -4,21 +4,25 @@
   "info": {
     "singularName": "client",
     "pluralName": "clients",
-    "displayName": "Clients"
+    "displayName": "Clients",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "client_id": {
-      "type": "uid"
-    },
     "phone_number": {
       "type": "string"
     },
     "email": {
       "type": "email"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
     }
   }
 }

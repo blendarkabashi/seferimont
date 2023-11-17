@@ -4,23 +4,80 @@ import Input from "src/components/Input";
 import { useState } from "react";
 import Button from "src/components/Button";
 import CreatableSelect from "react-select/creatable";
+import Autocomplete from "src/components/Autocomplete";
 // import { colourOptions } from '../data';
 
 // export default () => <CreatableSelect isClearable options={colourOptions} />;
 const index = () => {
+  const [client, setClient] = useState({
+    id: 0,
+    first_name: "Bashkim",
+    last_name: "Krasniqi",
+    phone_number: "+383-49-486-256",
+  });
+  const [plates, setPlates] = useState("03-773-DI");
+  const today = new Date();
+  const formattedToday = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, "0")}-${today
+    .getDate()
+    .toString()
+    .padStart(2, "0")}`;
+  const [date, setDate] = useState(formattedToday);
+  const [products, setProducts] = useState([
+    { id: 0, product: { value: 1, label: "Nderrim i vajit" }, quantity: 1, price: null },
+  ]);
+
   const services = [
     { value: 1, label: "Nderrim i vajit" },
     { value: 2, label: "Bosh Pumpa" },
     { value: 3, label: "Motorri" },
   ];
-  const [selectedService, setSelectedService] = useState(services[0]);
-  const [addedRows, setAddedRows] = useState([]);
+  const [paidAmount, setPaidAmount] = useState(0);
+  const invoiceTotal = () => {
+    return products.reduce(
+      (accumulator, product) => accumulator + parseFloat(product.price) * parseFloat(product.quantity),
+      0
+    )
+      ? products.reduce(
+          (accumulator, product) => accumulator + parseFloat(product.price) * parseFloat(product.quantity),
+          0
+        )
+      : 0;
+  };
 
   const addRow = () => {
-    setAddedRows([...addedRows, "row"]);
+    const newProduct = {
+      id: products.length,
+      product: null,
+      quantity: 0,
+      price: 0,
+      total: 0,
+    };
+
+    setProducts([...products, newProduct]);
   };
+
   const removeRow = () => {
-    setAddedRows(addedRows.slice(0, -1));
+    setProducts(products.slice(0, -1));
+  };
+
+  const handleProductChange = (item, index) => {
+    const updatedProducts = products.map((product, i) => {
+      if (i === index) {
+        return { ...product, product: item };
+      }
+      return product;
+    });
+    setProducts(updatedProducts);
+  };
+
+  const handleInputChange = (e, index, field) => {
+    const updatedProducts = products.map((product, i) => {
+      if (i === index) {
+        return { ...product, [field]: e.target.value };
+      }
+      return product;
+    });
+    setProducts(updatedProducts);
   };
 
   const customStyles = {
@@ -86,58 +143,66 @@ const index = () => {
           <p className="mt-2 text-sm text-gray-700">Ploteso fushat poshte dhe krijo nje fature.</p>
         </div>
       </div>
-      <div class="my-4">
-        <div class="grid md:grid-cols-2 gap-3 border-t border-gray-200 pt-5">
+      <div className="my-4">
+        <div className="grid md:grid-cols-2 gap-3 border-t border-gray-200 pt-5">
           <div>
-            <div class="grid space-y-3">
-              <dl class="grid sm:flex gap-x-3 text-sm items-center">
-                <dt class="min-w-[150px] max-w-[200px] text-gray-500">Fature per:</dt>
-                <dd class="text-gray-800">
-                  <Input placeholder={"Bashkim Krasniqi"} />
+            <div className="grid space-y-3">
+              <dl className="grid sm:flex gap-x-3 text-sm items-center">
+                <dt className="min-w-[150px] max-w-[200px] text-gray-500 mb-2 sm:mb-0">Fature per:</dt>
+                <dd className="text-gray-800">
+                  <Autocomplete />
+                  {/* <Input value={client.first_name + " " + client.last_name} placeholder={"Bashkim Krasniqi"} /> */}
                 </dd>
               </dl>
 
-              <dl class="grid sm:flex gap-x-3 text-sm items-center">
-                <dt class="min-w-[150px] max-w-[200px] text-gray-500">Numri i telefonit:</dt>
-                <dd class="text-gray-800 ">
-                  <Input placeholder={"+383 49 488 752"} />
+              <dl className="grid sm:flex gap-x-3 text-sm items-center">
+                <dt className="min-w-[150px] max-w-[200px] text-gray-500 mb-2 sm:mb-0">Numri i telefonit:</dt>
+                <dd className="text-gray-800 ">
+                  <Input value={client.phone_number} placeholder={"+383 49 488 752"} />
                 </dd>
               </dl>
             </div>
           </div>
 
           <div>
-            <div class="grid space-y-3">
-              <dl class="grid sm:flex gap-x-3 text-sm items-center">
-                <dt class="min-w-[150px] max-w-[200px] text-gray-500">Targat:</dt>
-                <dd class="text-gray-800 ">
-                  <Input placeholder={"03-773-DI"} />
+            <div className="grid space-y-3">
+              <dl className="grid sm:flex gap-x-3 text-sm items-center">
+                <dt className="min-w-[150px] max-w-[200px] text-gray-500 mb-2 sm:mb-0">Targat:</dt>
+                <dd className="text-gray-800 ">
+                  <Input value={plates} placeholder={"03-773-DI"} />
                 </dd>
               </dl>
-              <dl class="grid sm:flex gap-x-3 text-sm items-center">
-                <dt class="min-w-[150px] max-w-[200px] text-gray-500">Data e fundit e pageses:</dt>
-                <Input type="date" placeholder={"10 Jan 2023"} />
+              <dl className="grid sm:flex gap-x-3 text-sm items-center">
+                <dt className="min-w-[150px] max-w-[200px] text-gray-500 mb-2 sm:mb-0">Data e fundit e pageses:</dt>
+                <Input
+                  onChange={(event) => setDate(event.target.value)}
+                  value={date}
+                  type="date"
+                  placeholder={"10 Jan 2023"}
+                />
               </dl>
             </div>
           </div>
         </div>
 
-        <div class="mt-6 border border-gray-200 p-4 rounded-lg space-y-4 ">
-          <div class="hidden sm:grid sm:grid-cols-5">
-            <div class="sm:col-span-2 text-xs font-medium text-gray-500 uppercase">Produkti</div>
-            <div class="text-start text-xs font-medium text-gray-500 uppercase">Sasia</div>
-            <div class="text-start text-xs font-medium text-gray-500 uppercase">Cmimi</div>
-            <div class="text-end text-xs font-medium text-gray-500 uppercase">Totali</div>
+        <div className="mt-6 border border-gray-200 p-4 rounded-lg space-y-4 ">
+          <div className="hidden sm:grid sm:grid-cols-5">
+            <div className="sm:col-span-2 text-xs font-medium text-gray-500 uppercase">Produkti</div>
+            <div className="text-start text-xs font-medium text-gray-500 uppercase">Sasia</div>
+            <div className="text-start text-xs font-medium text-gray-500 uppercase">Cmimi</div>
+            <div className="text-end text-xs font-medium text-gray-500 uppercase">Totali</div>
           </div>
 
-          <div class="hidden sm:block border-b border-gray-200 "></div>
+          <div className="hidden sm:block border-b border-gray-200 "></div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-5 gap-2">
-            <div class="col-span-full sm:col-span-2">
-              <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase">Produkti</h5>
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
+            <div className="col-span-full sm:col-span-2">
+              <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase mb-2 sm:mb-0">Produkti</h5>
               <CreatableSelect
                 placeholder="Selekto apo krijo nje opsion"
                 isClearable
+                onChange={(item) => handleProductChange(item, 0)}
+                value={products[0].product}
                 options={services}
                 styles={customStyles}
                 formatCreateLabel={(inputValue) => `Krijo opsionin "${inputValue}"`}
@@ -145,73 +210,97 @@ const index = () => {
               {/* data={services} selected={selectedService} setSelected={setSelectedService} /> */}
             </div>
             <div>
-              <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase">Sasia</h5>
-              <Input placeholder={1} />
+              <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase mb-2 sm:mb-0">Sasia</h5>
+              <Input
+                onChange={(event) => handleInputChange(event, 0, "quantity")}
+                value={products[0].quantity}
+                placeholder={1}
+              />
             </div>
             <div>
-              <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase">Cmimi</h5>
-              <Input type="currency" placeholder={500} />
+              <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase mb-2 sm:mb-0">Cmimi</h5>
+              <Input
+                onChange={(event) => handleInputChange(event, 0, "price")}
+                value={products[0].price}
+                type="currency"
+                placeholder={0}
+              />
             </div>
             <div className="justify-end items-center flex">
-              <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase mr-2">Totali</h5>
-              <p class="sm:text-end text-gray-800 ">€500.00</p>
+              <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase mr-2">Totali</h5>
+              <p className="sm:text-end text-gray-800 ">€{products[0].price * products[0].quantity}</p>
             </div>
           </div>
-          <div class="sm:hidden border-b border-gray-200 "></div>
-          {addedRows.map((row) => (
+          <div className="sm:hidden border-b border-gray-200 "></div>
+          {products.slice(1).map((row, index) => (
             <>
-              <div class="grid grid-cols-1 sm:grid-cols-5 gap-2">
-                <div class="col-span-full sm:col-span-2">
-                  <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase">Produkti</h5>
+              <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
+                <div className="col-span-full sm:col-span-2">
+                  <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase mb-2 sm:mb-0">Produkti</h5>
                   <CreatableSelect
                     placeholder="Selekto apo krijo nje opsion"
                     isClearable
+                    onChange={(item) => handleProductChange(item, index + 1)}
+                    value={products[index + 1].product}
                     options={services}
                     styles={customStyles}
                     formatCreateLabel={(inputValue) => `Krijo opsionin "${inputValue}"`}
                   />
                 </div>
                 <div>
-                  <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase">Sasia</h5>
-                  <Input placeholder={1} />
+                  <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase mb-2 sm:mb-0">Sasia</h5>
+                  <Input onChange={(event) => handleInputChange(event, index + 1, "quantity")} placeholder={1} />
                 </div>
                 <div>
-                  <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase">Cmimi</h5>
-                  <Input type="currency" placeholder={500} />
+                  <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase mb-2 sm:mb-0">Cmimi</h5>
+                  <Input
+                    onChange={(event) => handleInputChange(event, index + 1, "price")}
+                    type="currency"
+                    placeholder={0}
+                  />
                 </div>
                 <div className="justify-end items-center flex">
-                  <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase mr-2">Totali</h5>
-                  <p class="sm:text-end text-gray-800 ">€500.00</p>
+                  <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase mr-2">Totali</h5>
+                  <p className="sm:text-end text-gray-800 ">
+                    €{products[index + 1].quantity * products[index + 1].price}
+                  </p>
                 </div>
               </div>
 
-              <div class="sm:hidden border-b border-gray-200 "></div>
+              <div className="sm:hidden border-b border-gray-200 "></div>
             </>
           ))}
-          <div className="flex items-center sm:max-w-fit">
+          <div className={`flex items-center ${products.length >= 2 ? "sm:max-w-[320px]" : "sm:max-w-fit"} `}>
             <Button className="mr-2" onClick={() => addRow()} label="Shto nje produkt" />
-            {addedRows.length >= 1 && <Button secondary onClick={() => removeRow()} label="Largo nje produkt" />}
+            {products.length >= 2 && <Button secondary onClick={() => removeRow()} label="Largo nje produkt" />}
           </div>
         </div>
 
-        <div class="mt-8 flex sm:justify-end">
-          <div class="w-full max-w-2xl sm:text-end space-y-2">
-            <div class="grid grid-cols-1 sm:grid-cols-1 gap-3 sm:gap-2">
-              <dl class="grid sm:grid-cols-5 gap-x-3 text-sm text-right sm:text-left grid-cols-1">
-                <dt class="col-span-3 text-gray-500">Totali:</dt>
-                <dd class="col-span-3 sm:col-span-2 font-medium text-gray-800 ">€2750.00</dd>
+        <div className="mt-8 flex sm:justify-end">
+          <div className="w-full max-w-2xl sm:text-end space-y-2">
+            <div className="grid grid-cols-1 sm:grid-cols-1 gap-3 sm:gap-2">
+              <dl className="grid sm:grid-cols-5 gap-x-3 text-sm text-center sm:text-right grid-cols-1">
+                <dt className="col-span-3 text-gray-500 mb-2 sm:mb-0">Totali:</dt>
+                <dd className="col-span-3 sm:col-span-2 font-medium text-gray-800 ">€{invoiceTotal()}</dd>
               </dl>
 
-              <dl class="grid sm:grid-cols-5 gap-x-3 text-sm text-right sm:text-left grid-cols-1 items-center">
-                <dt class="col-span-3 text-gray-500">E paguar:</dt>
-                <dd class="col-span-3 sm:col-span-2">
-                  <Input type="currency" inline className="text-right" placeholder="2500" />
+              <dl className="grid sm:grid-cols-5 gap-x-3 text-sm text-center sm:text-right grid-cols-1 items-center">
+                <dt className="col-span-3 text-gray-500 mb-2 sm:mb-0">E paguar:</dt>
+                <dd className="col-span-3 sm:col-span-2">
+                  <Input
+                    onChange={(event) => setPaidAmount(event.target.value)}
+                    value={paidAmount}
+                    type="currency"
+                    inline
+                    className="sm:text-right text-center"
+                    placeholder="2500"
+                  />
                 </dd>
               </dl>
 
-              <dl class="grid sm:grid-cols-5 gap-x-3 text-sm text-right sm:text-left grid-cols-1">
-                <dt class="col-span-3 text-gray-500">Borxhi:</dt>
-                <dd class="col-span-3 sm:col-span-2 font-medium text-gray-800 ">€50.00</dd>
+              <dl className="grid sm:grid-cols-5 gap-x-3 text-sm text-center sm:text-right grid-cols-1">
+                <dt className="col-span-3 text-gray-500 mb-2 sm:mb-0">Borxhi:</dt>
+                <dd className="col-span-3 sm:col-span-2 font-medium text-gray-800 ">€{invoiceTotal() - paidAmount}</dd>
               </dl>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import Script from "next/script";
-const Input = ({ inline, label, placeholder, type, name, id, className }) => {
+const Input = ({ onChange, inline, label, placeholder, type, name, id, className, value }) => {
   const currencyInput = () => {
     return (
       <div>
@@ -13,11 +13,13 @@ const Input = ({ inline, label, placeholder, type, name, id, className }) => {
             <span className="text-gray-500 sm:text-sm">€</span>
           </div>
           <input
+            value={value}
             type="text"
             name={name}
             id={id}
             className={`${className} block w-full rounded-md border-0 py-1.5 pl-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6`}
             placeholder="0.00"
+            onChange={onChange}
             aria-describedby="price-currency"
           />
         </div>
@@ -34,7 +36,9 @@ const Input = ({ inline, label, placeholder, type, name, id, className }) => {
       )}
       <div className={`${label && "mt-2"}`}>
         <input
+          value={value}
           type={type}
+          onChange={onChange}
           name={name}
           id={id}
           className={`${className} ${

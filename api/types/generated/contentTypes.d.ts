@@ -368,14 +368,16 @@ export interface ApiClientClient extends Schema.CollectionType {
     singularName: 'client';
     pluralName: 'clients';
     displayName: 'Clients';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    client_id: Attribute.UID;
     phone_number: Attribute.String;
     email: Attribute.Email;
+    first_name: Attribute.String;
+    last_name: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
