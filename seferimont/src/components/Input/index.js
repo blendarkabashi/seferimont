@@ -8,7 +8,7 @@ const Input = ({ inline, label, placeholder, type, name, id, className }) => {
             {label}
           </label>
         )}
-        <div className={`relative rounded-md shadow-sm ${inline && "inline-block"}`}>
+        <div className={`relative rounded-md shadow-sm ${inline && "sm:inline-block"}`}>
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <span className="text-gray-500 sm:text-sm">€</span>
           </div>

@@ -132,7 +132,7 @@ const index = () => {
 
           <div class="hidden sm:block border-b border-gray-200 "></div>
 
-          <div class="grid grid-cols-3 sm:grid-cols-5 gap-2">
+          <div class="grid grid-cols-1 sm:grid-cols-5 gap-2">
             <div class="col-span-full sm:col-span-2">
               <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase">Produkti</h5>
               <CreatableSelect
@@ -153,14 +153,14 @@ const index = () => {
               <Input type="currency" placeholder={500} />
             </div>
             <div className="justify-end items-center flex">
-              <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase">Totali</h5>
+              <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase mr-2">Totali</h5>
               <p class="sm:text-end text-gray-800 ">€500.00</p>
             </div>
           </div>
           <div class="sm:hidden border-b border-gray-200 "></div>
           {addedRows.map((row) => (
             <>
-              <div class="grid grid-cols-3 sm:grid-cols-5 gap-2">
+              <div class="grid grid-cols-1 sm:grid-cols-5 gap-2">
                 <div class="col-span-full sm:col-span-2">
                   <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase">Produkti</h5>
                   <CreatableSelect
@@ -180,7 +180,7 @@ const index = () => {
                   <Input type="currency" placeholder={500} />
                 </div>
                 <div className="justify-end items-center flex">
-                  <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase">Totali</h5>
+                  <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase mr-2">Totali</h5>
                   <p class="sm:text-end text-gray-800 ">€500.00</p>
                 </div>
               </div>
@@ -188,36 +188,36 @@ const index = () => {
               <div class="sm:hidden border-b border-gray-200 "></div>
             </>
           ))}
-          <div className="flex items-center">
-            <Button className="mr-2" inline onClick={() => addRow()} label="Shto nje produkt" />
-            {addedRows.length >= 1 && <Button secondary inline onClick={() => removeRow()} label="Largo nje produkt" />}
+          <div className="flex items-center sm:max-w-fit">
+            <Button className="mr-2" onClick={() => addRow()} label="Shto nje produkt" />
+            {addedRows.length >= 1 && <Button secondary onClick={() => removeRow()} label="Largo nje produkt" />}
           </div>
         </div>
 
         <div class="mt-8 flex sm:justify-end">
           <div class="w-full max-w-2xl sm:text-end space-y-2">
-            <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
-              <dl class="grid sm:grid-cols-5 gap-x-3 text-sm">
+            <div class="grid grid-cols-1 sm:grid-cols-1 gap-3 sm:gap-2">
+              <dl class="grid sm:grid-cols-5 gap-x-3 text-sm text-right sm:text-left grid-cols-1">
                 <dt class="col-span-3 text-gray-500">Totali:</dt>
-                <dd class="col-span-2 font-medium text-gray-800 ">€2750.00</dd>
+                <dd class="col-span-3 sm:col-span-2 font-medium text-gray-800 ">€2750.00</dd>
               </dl>
 
-              <dl class="grid sm:grid-cols-5 gap-x-3 text-sm items-center">
+              <dl class="grid sm:grid-cols-5 gap-x-3 text-sm text-right sm:text-left grid-cols-1 items-center">
                 <dt class="col-span-3 text-gray-500">E paguar:</dt>
-                <dd class="col-span-2">
+                <dd class="col-span-3 sm:col-span-2">
                   <Input type="currency" inline className="text-right" placeholder="2500" />
                 </dd>
               </dl>
 
-              <dl class="grid sm:grid-cols-5 gap-x-3 text-sm">
+              <dl class="grid sm:grid-cols-5 gap-x-3 text-sm text-right sm:text-left grid-cols-1">
                 <dt class="col-span-3 text-gray-500">Borxhi:</dt>
-                <dd class="col-span-2 font-medium text-gray-800 ">€50.00</dd>
+                <dd class="col-span-3 sm:col-span-2 font-medium text-gray-800 ">€50.00</dd>
               </dl>
             </div>
           </div>
         </div>
         <div className=" mt-16 flex justify-center">
-          <div className="w-[300px]">
+          <div className="sm:w-[300px] w-full">
             <Button success label="Ruaj Faturen" />
           </div>
         </div>
