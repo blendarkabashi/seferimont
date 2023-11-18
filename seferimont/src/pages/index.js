@@ -33,7 +33,8 @@ export default function Home() {
       toast.success("Jeni kycur me sukses!");
       router.push("/kryefaqja");
     } catch (error) {
-      toast.error(error.response.data.error.message);
+      console.log(error);
+      toast.error("error");
     } finally {
       setLoading(false);
     }

@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { AutoComplete } from "primereact/autocomplete";
 import axios from "axios";
 
-export default function Autocomplete() {
+export default function Autocomplete({ required, selectedClient, setSelectedClient, onSelect }) {
   const [clients, setClients] = useState([]);
-  const [selectedClient, setSelectedClient] = useState(null);
   const [filteredClients, setFilteredClients] = useState(null);
 
   const search = (event) => {
@@ -41,18 +40,25 @@ export default function Autocomplete() {
   };
 
   const valueTemplate = (client) => {
+    console.log(client);
     return client ? `${client.attributes.first_name} ${client.attributes.last_name}` : "";
   };
 
   return (
     <div className="card flex justify-content-center">
       <AutoComplete
-        className="h-[36px] text-sm rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+        // placeholder="Shkruaj emrin apo zgjedh nje nga opsionet"
+        required={required}
+        title="Shkruaj emrin apo zgjedh nje nga opsionet qe shfaqen"
+        className=" placeholder-[#9ca3af] w-full sm:w-auto h-[36px] text-sm rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
         itemTemplate={clientTemplate}
         value={selectedClient}
         suggestions={filteredClients}
         completeMethod={search}
-        onChange={(e) => setSelectedClient(e.value)}
+        onChange={(event) => setSelectedClient(event.value)}
+        valueTemplate={valueTemplate}
+        field="attributes.fullname"
+        onSelect={onSelect}
       />
     </div>
   );

@@ -23,6 +23,15 @@
     },
     "last_name": {
       "type": "string"
+    },
+    "fullname": {
+      "type": "string"
+    },
+    "invoice_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::invoice.invoice",
+      "mappedBy": "client"
     }
   }
 }

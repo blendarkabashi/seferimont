@@ -1,4 +1,4 @@
-const Button = ({ disabled, success, secondary, inline, onClick, label, children, loading, className }) => {
+const Button = ({ type, disabled, success, secondary, inline, onClick, label, children, loading, className }) => {
   let bgColor = "bg-gray-900";
   let hoverColor = "hover:bg-gray-800";
   if (secondary) {
@@ -12,6 +12,7 @@ const Button = ({ disabled, success, secondary, inline, onClick, label, children
   return (
     <button
       onClick={onClick}
+      type={type ? type : "button"}
       className={`${disabled && "opacity-50 pointer-events-none"} ${className} h-[36px] ${
         inline ? "inline-block" : "flex w-full"
       } justify-center rounded-md ${bgColor} ${hoverColor}  px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm`}

@@ -73,6 +73,9 @@
     },
     "phone_number": {
       "type": "string"
+    },
+    "fullname": {
+      "type": "string"
     }
   }
 }
