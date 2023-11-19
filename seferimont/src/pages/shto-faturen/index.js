@@ -26,7 +26,7 @@ const index = () => {
     .toString()
     .padStart(2, "0")}`;
   const [date, setDate] = useState(formattedToday);
-  const [products, setProducts] = useState([{ id: 0, product: "", quantity: 1, price: "" }]);
+  const [products, setProducts] = useState([{ id: 0, product: "", quantity: 1, price: 0 }]);
 
   const [services, setServices] = useState([
     // { value: 1, label: "Nderrim i vajit" },
@@ -70,7 +70,6 @@ const index = () => {
       quantity: 1,
       price: 0,
     };
-    console.log(newProduct);
 
     setProducts([...products, newProduct]);
     console.log(products);
@@ -192,7 +191,7 @@ const index = () => {
       });
       setLoadingInvoice(false);
       router.push("/faturat");
-      toast.success(`Fatura per ${products.client.fullname} u shtua me sukses!`);
+      toast.success(`Fatura u shtua me sukses!`);
     } catch (error) {
       toast.success(`Ka nje problem ne sistem. Fatura nuk eshte shtuar, provojeni prape me vone!`);
       console.error("Error adding invoice:", error);

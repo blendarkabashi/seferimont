@@ -1,8 +1,10 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
-import { classNames } from "src/global/functions";
+import { classNames, formatCurrency, formatDateString } from "src/global/functions";
 import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
-const RecentClients = ({ clients }) => {
+import { useRouter } from "next/router";
+const RecentClients = ({ invoices }) => {
+  const router = useRouter();
   const statuses = {
     Paguar: "text-green-700 bg-green-50 ring-green-600/20",
     Papaguar: "text-red-700 bg-red-50 ring-red-600/10",
@@ -17,15 +19,12 @@ const RecentClients = ({ clients }) => {
                       </a> */}
         </div>
         <ul role="list" className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8">
-          {clients.map((client) => (
-            <li key={client.id} className="overflow-hidden rounded-xl border border-gray-200">
+          {invoices.map((invoice) => (
+            <li key={invoice.id} className="overflow-hidden rounded-xl border border-gray-200">
               <div className="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 px-6 py-3">
-                {/* <img
-                              src={client.imageUrl}
-                              alt={client.name}
-                              className="h-12 w-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10"
-                            /> */}
-                <div className="text-sm font-medium leading-6 text-gray-900">{client.name}</div>
+                <div className="text-sm font-medium leading-6 text-gray-900">
+                  {invoice.attributes.client.data.attributes.fullname}
+                </div>
                 <Menu as="div" className="relative ml-auto">
                   <Menu.Button className="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500">
                     <span className="sr-only">Open options</span>
@@ -44,17 +43,17 @@ const RecentClients = ({ clients }) => {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="#"
+                            onClick={() => router.push(`/faturat/${invoice.id}`)}
                             className={classNames(
                               active ? "bg-gray-50" : "",
-                              "block px-3 py-1 text-sm leading-6 text-gray-900"
+                              "cursor-pointer block px-3 py-1 text-sm leading-6 text-gray-900"
                             )}
                           >
-                            Shiko detajet<span className="sr-only">, {client.name}</span>
+                            Shiko detajet<span className="sr-only">, {invoice.id}</span>
                           </a>
                         )}
                       </Menu.Item>
-                      <Menu.Item>
+                      {/* <Menu.Item>
                         {({ active }) => (
                           <a
                             href="#"
@@ -63,10 +62,10 @@ const RecentClients = ({ clients }) => {
                               "block px-3 py-1 text-sm leading-6 text-gray-900"
                             )}
                           >
-                            Edito<span className="sr-only">, {client.name}</span>
+                            Edito<span className="sr-only">, {invoice.id}</span>
                           </a>
                         )}
-                      </Menu.Item>
+                      </Menu.Item> */}
                     </Menu.Items>
                   </Transition>
                 </Menu>
@@ -75,26 +74,25 @@ const RecentClients = ({ clients }) => {
                 <div className="flex justify-between gap-x-4 py-3">
                   <dt className="text-gray-500">Data e fatures</dt>
                   <dd className="text-gray-700">
-                    <time dateTime={client.lastInvoice.dateTime}>{client.lastInvoice.date}</time>
+                    <time>{formatDateString(invoice.attributes.invoice_due)}</time>
                   </dd>
                 </div>
                 <div className="flex justify-between gap-x-4 py-3">
                   <dt className="text-gray-500">Shuma</dt>
                   <dd className="flex items-start gap-x-2">
-                    <div className="font-medium text-gray-900">{client.lastInvoice.amount}</div>
+                    <div className="font-medium text-gray-900">{formatCurrency(invoice.attributes.invoice_unpaid)}</div>
                     <div
-                      className={classNames(
-                        statuses[client.lastInvoice.status],
-                        "rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset"
-                      )}
+                      className={
+                        "text-red-700 bg-red-50 ring-red-600/10 rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset"
+                      }
                     >
-                      {client.lastInvoice.status}
+                      E papaguar
                     </div>
                   </dd>
                 </div>
                 <div className="flex justify-between gap-x-4 py-3">
                   <dt className="text-gray-500">Numri i telefonit</dt>
-                  <dd className="text-gray-700">{client.phone_number}</dd>
+                  <dd className="text-gray-700">{invoice.attributes.client.data.attributes.phone_number}</dd>
                 </div>
               </dl>
             </li>

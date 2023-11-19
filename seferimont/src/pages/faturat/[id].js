@@ -101,12 +101,14 @@ const index = () => {
                     <span class="block font-semibold">{invoice.client.data.attributes.phone_number}</span>
                   </dd>
                 </dl>
-                <dl class="grid sm:flex gap-x-3 text-sm">
-                  <dt class="min-w-[150px] max-w-[200px] text-gray-500">Targat:</dt>
-                  <dd class="text-gray-800 ">
-                    <span class="block font-semibold">{invoice.plates}</span>
-                  </dd>
-                </dl>
+                {invoice.plates && (
+                  <dl class="grid sm:flex gap-x-3 text-sm">
+                    <dt class="min-w-[150px] max-w-[200px] text-gray-500">Targat:</dt>
+                    <dd class="text-gray-800 ">
+                      <span class="block font-semibold">{invoice.plates}</span>
+                    </dd>
+                  </dl>
+                )}
               </div>
             </div>
 
@@ -148,11 +150,11 @@ const index = () => {
                   </div>
                   <div>
                     <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase">Cmimi</h5>
-                    <p class="text-gray-800 ">${item.price}</p>
+                    <p class="text-gray-800 ">€{parseFloat(item.price)}</p>
                   </div>
                   <div>
                     <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase">Totali</h5>
-                    <p class="sm:text-end text-gray-800 ">${item.price * item.quantity}</p>
+                    <p class="sm:text-end text-gray-800 ">€{item.price * item.quantity}</p>
                   </div>
                 </div>
 
@@ -166,17 +168,17 @@ const index = () => {
               <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
                 <dl class="grid sm:grid-cols-5 gap-x-3 text-sm">
                   <dt class="col-span-3 text-gray-500">Totali:</dt>
-                  <dd class="col-span-2 font-medium text-gray-800 ">$2750.00</dd>
+                  <dd class="col-span-2 font-medium text-gray-800 ">€{invoice.invoice_total}</dd>
                 </dl>
 
                 <dl class="grid sm:grid-cols-5 gap-x-3 text-sm">
                   <dt class="col-span-3 text-gray-500">E paguar:</dt>
-                  <dd class="col-span-2 font-medium text-gray-800 ">$2700.00</dd>
+                  <dd class="col-span-2 font-medium text-gray-800 ">€{invoice.invoice_paid}</dd>
                 </dl>
 
                 <dl class="grid sm:grid-cols-5 gap-x-3 text-sm">
                   <dt class="col-span-3 text-gray-500">Borxhi:</dt>
-                  <dd class="col-span-2 font-medium text-gray-800 ">$50.00</dd>
+                  <dd class="col-span-2 font-medium text-gray-800 ">€{invoice.invoice_unpaid}</dd>
                 </dl>
               </div>
             </div>

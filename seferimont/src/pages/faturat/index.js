@@ -2,8 +2,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Loader from "src/components/Loader";
 import { formatDateString } from "src/global/functions";
+import { useRouter } from "next/router";
 
 export default function Faturat() {
+  const router = useRouter();
   const [invoices, setInvoices] = useState([
     // { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
     // More people...
@@ -54,6 +56,12 @@ export default function Faturat() {
                     scope="col"
                     className="sticky top-[64px] z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8"
                   >
+                    Nr. rendor
+                  </th>
+                  <th
+                    scope="col"
+                    className="sticky top-[64px] z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8"
+                  >
                     Emri i klientit
                   </th>
                   <th
@@ -82,6 +90,12 @@ export default function Faturat() {
                   </th>
                   <th
                     scope="col"
+                    className="sticky top-[64px] z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter"
+                  >
+                    Shuma totale
+                  </th>
+                  <th
+                    scope="col"
                     className="sticky top-[64px] z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-3 pr-4 backdrop-blur backdrop-filter sm:pr-6 lg:pr-8"
                   >
                     <span className="sr-only">Shiko detajet</span>
@@ -92,6 +106,14 @@ export default function Faturat() {
                 {/* client.fullname client.phone_number plates invoice_due invoice_unpaid */}
                 {invoices.map((invoice, index) => (
                   <tr key={invoice.attributes.id}>
+                    <td
+                      className={classNames(
+                        index !== invoices.length - 1 ? "border-b border-gray-200" : "",
+                        "whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-500 sm:pl-6 lg:pl-8"
+                      )}
+                    >
+                      {invoice.id}
+                    </td>
                     <td
                       className={classNames(
                         index !== invoices.length - 1 ? "border-b border-gray-200" : "",
@@ -127,7 +149,9 @@ export default function Faturat() {
                     <td
                       className={classNames(
                         index !== invoices.length - 1 ? "border-b border-gray-200" : "",
-                        "whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                        `whitespace-nowrap px-3 py-4 text-sm ${
+                          invoice.attributes.invoice_unpaid > 0 ? "text-red-500" : "text-green-500"
+                        }`
                       )}
                     >
                       €{invoice.attributes.invoice_unpaid}
@@ -135,10 +159,21 @@ export default function Faturat() {
                     <td
                       className={classNames(
                         index !== invoices.length - 1 ? "border-b border-gray-200" : "",
+                        "whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                      )}
+                    >
+                      €{invoice.attributes.invoice_total}
+                    </td>
+                    <td
+                      className={classNames(
+                        index !== invoices.length - 1 ? "border-b border-gray-200" : "",
                         "relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-8 lg:pr-8"
                       )}
                     >
-                      <a href="#" className="text-gray-900 hover:text-gray-500">
+                      <a
+                        onClick={() => router.push(`/faturat/${invoice.id}`)}
+                        className="text-indigo-600 hover:text-indigo-500 cursor-pointer"
+                      >
                         Shiko detajet<span className="sr-only">, {invoice.attributes.name}</span>
                       </a>
                     </td>

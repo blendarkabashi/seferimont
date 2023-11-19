@@ -16,13 +16,11 @@ const Input = ({ readonly, required, onChange, inline, label, placeholder, type,
             readonly={readonly}
             required={required}
             value={value}
-            type="text"
             name={name}
             id={id}
             className={`${className} block w-full rounded-md border-0 py-1.5 pl-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6`}
-            placeholder="0.00"
+            placeholder={0}
             onChange={onChange}
-            aria-describedby="price-currency"
           />
         </div>
       </div>

@@ -10,3 +10,12 @@ export function formatDateString(dateString) {
     day: "2-digit",
   });
 }
+
+export function formatCurrency(value) {
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "EUR",
+  });
+
+  return formatter.format(value);
+}
