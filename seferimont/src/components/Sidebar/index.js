@@ -157,7 +157,6 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
                 <ul role="list" className="-mx-2 space-y-1">
                   {navigation.map((item) => (
                     <li key={item.name}>
-                      {console.log(item.href, router.asPath)}
                       <a
                         href={item.href}
                         className={classNames(
