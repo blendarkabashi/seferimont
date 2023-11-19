@@ -12,7 +12,7 @@ import axios from "axios";
 
 // export default () => <CreatableSelect isClearable options={colourOptions} />;
 const index = () => {
-  const [client, setClient] = useState(null);
+  const [client, setClient] = useState("");
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [plates, setPlates] = useState("");
@@ -22,7 +22,7 @@ const index = () => {
     .toString()
     .padStart(2, "0")}`;
   const [date, setDate] = useState(formattedToday);
-  const [products, setProducts] = useState([{ id: 0, product: null, quantity: 1, price: null }]);
+  const [products, setProducts] = useState([{ id: 0, product: "", quantity: 1, price: "" }]);
 
   const [services, setServices] = useState([
     // { value: 1, label: "Nderrim i vajit" },
@@ -55,14 +55,20 @@ const index = () => {
       setServices(formattedServices);
     });
   };
+  const getInvoice = async (id) => {
+    axios.get(`http://localhost:1337/api/invoices/${id}?populate=*`).then((result) => {
+      console.log(result.data.data);
+    });
+  };
   useEffect(() => {
     getServices();
+    getInvoice(1);
   }, []);
 
   const addRow = () => {
     const newProduct = {
       id: products.length,
-      product: null,
+      product: "",
       quantity: 1,
       price: 0,
       total: 0,
@@ -182,7 +188,6 @@ const index = () => {
         const { __isNew__, ...productWithoutIsNew } = item.product;
         return productWithoutIsNew;
       });
-    console.log(newProducts);
     newProducts.forEach((element) => {
       addProductToAPI(element);
     });
@@ -220,7 +225,7 @@ const index = () => {
                     <Input
                       onChange={(event) => setPhoneNumber(event.target.value)}
                       value={phoneNumber}
-                      placeholder={"+383 49 488 752"}
+                      placeholder={"Shkruaj numrin e telefonit"}
                     />
                   </dd>
                 </dl>
@@ -235,12 +240,12 @@ const index = () => {
                     <Input
                       onChange={(event) => setPlates(event.target.value)}
                       value={plates}
-                      placeholder={"03-773-DI"}
+                      placeholder={"Shkruaj targat e makines"}
                     />
                   </dd>
                 </dl>
                 <dl className="grid sm:flex gap-x-3 text-sm items-center">
-                  <dt className="min-w-[150px] max-w-[200px] text-gray-500 mb-2 sm:mb-0">Data e fundit per pagese:</dt>
+                  <dt className="min-w-[150px] max-w-[200px] text-gray-500 mb-2 sm:mb-0">Data e pageses:</dt>
                   <Input
                     required
                     onChange={(event) => setDate(event.target.value)}
@@ -332,6 +337,7 @@ const index = () => {
                     <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase mb-2 sm:mb-0">Cmimi</h5>
                     <Input
                       required
+                      value={products[index + 1].price}
                       onChange={(event) => handleInputChange(event, index + 1, "price")}
                       type="currency"
                       placeholder={0}

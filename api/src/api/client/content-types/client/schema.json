@@ -18,16 +18,11 @@
     "email": {
       "type": "email"
     },
-    "first_name": {
-      "type": "string"
-    },
-    "last_name": {
-      "type": "string"
-    },
     "fullname": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
-    "invoice_id": {
+    "invoice": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::invoice.invoice",

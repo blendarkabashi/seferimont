@@ -12,9 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "invoice_id": {
-      "type": "uid"
-    },
     "invoice_total": {
       "type": "decimal"
     },
@@ -34,9 +31,12 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::client.client",
-      "inversedBy": "invoice_id"
+      "inversedBy": "invoice"
     },
-    "products": {
+    "plates": {
+      "type": "string"
+    },
+    "invoice_items": {
       "type": "json"
     }
   }

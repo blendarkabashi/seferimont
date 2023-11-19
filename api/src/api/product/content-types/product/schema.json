@@ -14,6 +14,12 @@
   "attributes": {
     "label": {
       "type": "string"
+    },
+    "invoice_items": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::invoice-item.invoice-item",
+      "mappedBy": "product"
     }
   }
 }

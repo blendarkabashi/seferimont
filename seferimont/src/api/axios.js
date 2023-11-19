@@ -7,7 +7,6 @@ export const initializeAxiosInterceptor = () => {
       const token = localStorage.getItem("token");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
-        console.log("headers", config.headers);
       }
       return config;
     },

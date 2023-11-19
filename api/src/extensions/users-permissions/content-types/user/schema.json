@@ -65,12 +65,6 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "first_name": {
-      "type": "string"
-    },
-    "last_name": {
-      "type": "string"
-    },
     "phone_number": {
       "type": "string"
     },

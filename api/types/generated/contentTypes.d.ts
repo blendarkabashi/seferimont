@@ -376,10 +376,8 @@ export interface ApiClientClient extends Schema.CollectionType {
   attributes: {
     phone_number: Attribute.String;
     email: Attribute.Email;
-    first_name: Attribute.String;
-    last_name: Attribute.String;
-    fullname: Attribute.String;
-    invoice_id: Attribute.Relation<
+    fullname: Attribute.String & Attribute.Required;
+    invoice: Attribute.Relation<
       'api::client.client',
       'oneToOne',
       'api::invoice.invoice'
@@ -414,7 +412,6 @@ export interface ApiInvoiceInvoice extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    invoice_id: Attribute.UID;
     invoice_total: Attribute.Decimal;
     invoice_unpaid: Attribute.Decimal;
     invoice_paid: Attribute.Decimal;
@@ -425,7 +422,8 @@ export interface ApiInvoiceInvoice extends Schema.CollectionType {
       'oneToOne',
       'api::client.client'
     >;
-    products: Attribute.JSON;
+    plates: Attribute.String;
+    invoice_items: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -437,6 +435,44 @@ export interface ApiInvoiceInvoice extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::invoice.invoice',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiInvoiceItemInvoiceItem extends Schema.CollectionType {
+  collectionName: 'invoice_items';
+  info: {
+    singularName: 'invoice-item';
+    pluralName: 'invoice-items';
+    displayName: 'InvoiceItem';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    quantity: Attribute.Integer;
+    price: Attribute.Decimal;
+    total_price: Attribute.Decimal;
+    product: Attribute.Relation<
+      'api::invoice-item.invoice-item',
+      'manyToOne',
+      'api::product.product'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::invoice-item.invoice-item',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::invoice-item.invoice-item',
       'oneToOne',
       'admin::user'
     > &
@@ -457,6 +493,11 @@ export interface ApiProductProduct extends Schema.CollectionType {
   };
   attributes: {
     label: Attribute.String;
+    invoice_items: Attribute.Relation<
+      'api::product.product',
+      'oneToMany',
+      'api::invoice-item.invoice-item'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -772,8 +813,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
-    first_name: Attribute.String;
-    last_name: Attribute.String;
     phone_number: Attribute.String;
     fullname: Attribute.String;
     createdAt: Attribute.DateTime;
@@ -805,6 +844,7 @@ declare module '@strapi/types' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'api::client.client': ApiClientClient;
       'api::invoice.invoice': ApiInvoiceInvoice;
+      'api::invoice-item.invoice-item': ApiInvoiceItemInvoiceItem;
       'api::product.product': ApiProductProduct;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;

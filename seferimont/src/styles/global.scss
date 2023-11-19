@@ -8,8 +8,14 @@
   font-size: 14px;
   outline: none !important;
   --tw-ring-color: transparent !important;
+  &::placeholder{
+    color: #9CA3AF;
+  }
 }
 
 .p-autocomplete-item{
   font-size: 14px !important;
+}
+
+.placeholder-color ::placeholder {
 }

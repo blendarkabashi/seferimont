@@ -15,7 +15,7 @@ export default function Autocomplete({ required, selectedClient, setSelectedClie
         _filteredClients = [...clients];
       } else {
         _filteredClients = clients.filter((client) => {
-          return client.attributes.first_name.toLowerCase().startsWith(event.query.toLowerCase());
+          return client.attributes.fullname.toLowerCase().startsWith(event.query.toLowerCase());
         });
       }
       setFilteredClients(_filteredClients);
@@ -36,21 +36,21 @@ export default function Autocomplete({ required, selectedClient, setSelectedClie
   }, []);
 
   const clientTemplate = (client) => {
-    return `${client.attributes.first_name} ${client.attributes.last_name}`;
+    return `${client.attributes.fullname}`;
   };
 
   const valueTemplate = (client) => {
-    console.log(client);
-    return client ? `${client.attributes.first_name} ${client.attributes.last_name}` : "";
+    return client ? `${client.attributes.fullname}` : "";
   };
 
   return (
     <div className="card flex justify-content-center">
       <AutoComplete
         // placeholder="Shkruaj emrin apo zgjedh nje nga opsionet"
+        placeholder="Shkruaj emrin e klientit"
         required={required}
         title="Shkruaj emrin apo zgjedh nje nga opsionet qe shfaqen"
-        className=" placeholder-[#9ca3af] w-full sm:w-auto h-[36px] text-sm rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+        className="w-full sm:w-auto h-[36px] text-sm rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
         itemTemplate={clientTemplate}
         value={selectedClient}
         suggestions={filteredClients}
@@ -59,6 +59,8 @@ export default function Autocomplete({ required, selectedClient, setSelectedClie
         valueTemplate={valueTemplate}
         field="attributes.fullname"
         onSelect={onSelect}
+        showEmptyMessage={true}
+        emptyMessage="Nuk ka klient te regjistruar me kete emer"
       />
     </div>
   );
