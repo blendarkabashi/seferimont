@@ -114,7 +114,7 @@ export default function Klientet() {
                     scope="col"
                     className="sticky top-[64px] z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-3 pr-4 backdrop-blur backdrop-filter sm:pr-6 lg:pr-8"
                   >
-                    <span className="sr-only">Edit</span>
+                    <span className="sr-only">Shiko detajet</span>
                   </th>
                 </tr>
               </thead>
@@ -160,7 +160,7 @@ export default function Klientet() {
                       )}
                     >
                       <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                        Edito<span className="sr-only">, {person.name}</span>
+                        Shiko detajet<span className="sr-only">, {person.name}</span>
                       </a>
                     </td>
                   </tr>

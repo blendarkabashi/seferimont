@@ -1,5 +1,5 @@
 import Script from "next/script";
-const Input = ({ required, onChange, inline, label, placeholder, type, name, id, className, value }) => {
+const Input = ({ readonly, required, onChange, inline, label, placeholder, type, name, id, className, value }) => {
   const currencyInput = () => {
     return (
       <div>
@@ -13,6 +13,7 @@ const Input = ({ required, onChange, inline, label, placeholder, type, name, id,
             <span className="text-gray-500 sm:text-sm">€</span>
           </div>
           <input
+            readonly={readonly}
             required={required}
             value={value}
             type="text"
@@ -37,6 +38,7 @@ const Input = ({ required, onChange, inline, label, placeholder, type, name, id,
       )}
       <div className={`${label && "mt-2"}`}>
         <input
+          readOnly={readonly}
           required={required}
           value={value}
           type={type}

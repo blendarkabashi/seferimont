@@ -7,13 +7,16 @@ import CreatableSelect from "react-select/creatable";
 import Autocomplete from "src/components/Autocomplete";
 import { useMemo } from "react";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 // import { colourOptions } from '../data';
 
 // export default () => <CreatableSelect isClearable options={colourOptions} />;
 const index = () => {
+  const router = useRouter();
   const [client, setClient] = useState("");
 
+  const [loadingInvoice, setLoadingInvoice] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [plates, setPlates] = useState("");
   const today = new Date();
@@ -55,14 +58,8 @@ const index = () => {
       setServices(formattedServices);
     });
   };
-  const getInvoice = async (id) => {
-    axios.get(`http://localhost:1337/api/invoices/${id}?populate=*`).then((result) => {
-      console.log(result.data.data);
-    });
-  };
   useEffect(() => {
     getServices();
-    getInvoice(1);
   }, []);
 
   const addRow = () => {
@@ -71,7 +68,6 @@ const index = () => {
       product: "",
       quantity: 1,
       price: 0,
-      total: 0,
     };
     console.log(newProduct);
 
@@ -177,11 +173,32 @@ const index = () => {
     }
   };
 
-  const handleSubmit = (event) => {
+  const addClient = async (data) => {
+    try {
+      const response = await axios.post("http://localhost:1337/api/clients", {
+        data: data,
+      });
+      return response.data.data.id;
+    } catch (error) {
+      console.error("Error adding client:", error);
+    }
+  };
+
+  const addInvoice = async (data) => {
+    try {
+      const response = await axios.post("http://localhost:1337/api/invoices", {
+        data: data,
+      });
+      setLoadingInvoice(false);
+      router.push("/faturat");
+    } catch (error) {
+      console.error("Error adding invoice:", error);
+    }
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    //add products to api
-    console.log(products);
     let newProducts = products
       .filter((row) => row.product.__isNew__)
       .map((item) => {
@@ -191,6 +208,23 @@ const index = () => {
     newProducts.forEach((element) => {
       addProductToAPI(element);
     });
+
+    let clientId = client.id ? client.id : null;
+    if (!client.id) {
+      clientId = await addClient({ fullname: client, phone_number: phoneNumber });
+    }
+
+    let invoiceData = {
+      client: clientId,
+      plates: plates,
+      invoice_items: products,
+      invoice_due: date,
+      invoice_paid: paidAmount,
+      invoice_total: invoiceTotal,
+      invoice_unpaid: invoiceTotal - paidAmount,
+    };
+    setLoadingInvoice(true);
+    await addInvoice(invoiceData);
   };
 
   return (
@@ -223,6 +257,8 @@ const index = () => {
                   <dt className="min-w-[150px] max-w-[200px] text-gray-500 mb-2 sm:mb-0">Numri i telefonit:</dt>
                   <dd className="text-gray-800">
                     <Input
+                      id="phone_number"
+                      readonly={client.id ? true : false}
                       onChange={(event) => setPhoneNumber(event.target.value)}
                       value={phoneNumber}
                       placeholder={"Shkruaj numrin e telefonit"}
@@ -390,7 +426,7 @@ const index = () => {
           </div>
           <div className=" mt-16 flex justify-center">
             <div className="sm:w-[300px] w-full">
-              <Button type={"submit"} success label="Ruaj Faturen" />
+              <Button loading={loadingInvoice} type={"submit"} success label="Ruaj Faturen" />
             </div>
           </div>
         </form>

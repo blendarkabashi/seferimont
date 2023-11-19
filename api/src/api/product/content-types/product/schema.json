@@ -13,7 +13,8 @@
   "pluginOptions": {},
   "attributes": {
     "label": {
-      "type": "string"
+      "type": "string",
+      "unique": true
     },
     "invoice_items": {
       "type": "relation",

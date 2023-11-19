@@ -492,7 +492,7 @@ export interface ApiProductProduct extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    label: Attribute.String;
+    label: Attribute.String & Attribute.Unique;
     invoice_items: Attribute.Relation<
       'api::product.product',
       'oneToMany',
