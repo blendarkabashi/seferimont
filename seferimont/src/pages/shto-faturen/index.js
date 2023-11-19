@@ -8,6 +8,7 @@ import Autocomplete from "src/components/Autocomplete";
 import { useMemo } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
+import toast from "react-hot-toast";
 
 // import { colourOptions } from '../data';
 
@@ -191,7 +192,9 @@ const index = () => {
       });
       setLoadingInvoice(false);
       router.push("/faturat");
+      toast.success(`Fatura per ${products.client.fullname} u shtua me sukses!`);
     } catch (error) {
+      toast.success(`Ka nje problem ne sistem. Fatura nuk eshte shtuar, provojeni prape me vone!`);
       console.error("Error adding invoice:", error);
     }
   };

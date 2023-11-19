@@ -22,9 +22,9 @@
       "type": "string",
       "required": true
     },
-    "invoice": {
+    "invoices": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "oneToMany",
       "target": "api::invoice.invoice",
       "mappedBy": "client"
     }

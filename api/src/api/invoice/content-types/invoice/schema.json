@@ -27,17 +27,17 @@
     "invoice_due": {
       "type": "datetime"
     },
-    "client": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::client.client",
-      "inversedBy": "invoice"
-    },
     "plates": {
       "type": "string"
     },
     "invoice_items": {
       "type": "json"
+    },
+    "client": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::client.client",
+      "inversedBy": "invoices"
     }
   }
 }

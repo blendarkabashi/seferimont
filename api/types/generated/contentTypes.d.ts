@@ -377,9 +377,9 @@ export interface ApiClientClient extends Schema.CollectionType {
     phone_number: Attribute.String;
     email: Attribute.Email;
     fullname: Attribute.String & Attribute.Required;
-    invoice: Attribute.Relation<
+    invoices: Attribute.Relation<
       'api::client.client',
-      'oneToOne',
+      'oneToMany',
       'api::invoice.invoice'
     >;
     createdAt: Attribute.DateTime;
@@ -417,13 +417,13 @@ export interface ApiInvoiceInvoice extends Schema.CollectionType {
     invoice_paid: Attribute.Decimal;
     description: Attribute.Text;
     invoice_due: Attribute.DateTime;
-    client: Attribute.Relation<
-      'api::invoice.invoice',
-      'oneToOne',
-      'api::client.client'
-    >;
     plates: Attribute.String;
     invoice_items: Attribute.JSON;
+    client: Attribute.Relation<
+      'api::invoice.invoice',
+      'manyToOne',
+      'api::client.client'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

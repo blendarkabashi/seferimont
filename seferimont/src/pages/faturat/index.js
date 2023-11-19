@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Loader from "src/components/Loader";
+import { formatDateString } from "src/global/functions";
 
 export default function Faturat() {
   const [invoices, setInvoices] = useState([
@@ -14,7 +15,7 @@ export default function Faturat() {
     const fetchInvoices = async () => {
       try {
         const result = await axios.get("http://localhost:1337/api/invoices?populate=*");
-        setInvoices(result.data.data);
+        setInvoices(result.data.data.reverse());
       } catch (error) {
         console.error("Error fetching invoices:", error);
       }
@@ -113,7 +114,7 @@ export default function Faturat() {
                         "whitespace-nowrap hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                       )}
                     >
-                      {invoice.attributes.plates}
+                      {invoice.attributes.plates ? invoice.attributes.plates : "-"}
                     </td>
                     <td
                       className={classNames(
@@ -121,7 +122,7 @@ export default function Faturat() {
                         "whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                       )}
                     >
-                      {invoice.attributes.invoice_due}
+                      {formatDateString(invoice.attributes.invoice_due)}
                     </td>
                     <td
                       className={classNames(
