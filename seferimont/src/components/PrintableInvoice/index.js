@@ -107,7 +107,7 @@ const PrintableInvoice = ({ invoice }) => {
           </div>
         </div>
 
-        <div class="mt-8 sm:mt-12">
+        <div class="mt-8 sm:mt-72">
           <h4 class="text-lg font-semibold text-gray-800 ">Faleminderit!</h4>
           <p class="text-gray-500">Nese keni ndonje pyetje rreth kesaj fature na kontaktoni ne numrin me poshte:</p>
           <div class="mt-2">
