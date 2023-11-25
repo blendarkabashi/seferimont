@@ -38,7 +38,7 @@ const Kryefaqja = () => {
       const dueDate = new Date(invoice.attributes.invoice_due);
       const unpaidAmount = invoice.attributes.invoice_unpaid;
 
-      return dueDate > today && unpaidAmount !== 0;
+      return dueDate <= today && unpaidAmount !== 0;
     });
 
     setDueInvoices(dueInvoices);

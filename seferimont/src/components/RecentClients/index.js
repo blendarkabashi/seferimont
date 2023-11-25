@@ -19,7 +19,7 @@ const RecentClients = ({ invoices }) => {
                       </a> */}
         </div>
         <ul role="list" className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8">
-          {invoices.map((invoice) => (
+          {invoices.reverse().map((invoice) => (
             <li key={invoice.id} className="overflow-hidden rounded-xl border border-gray-200">
               <div className="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 px-6 py-3">
                 <div className="text-sm font-medium leading-6 text-gray-900">
