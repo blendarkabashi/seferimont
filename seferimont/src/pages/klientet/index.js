@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import withAuth from "src/components/withAuth";
 
-export default function Klientet() {
+const Klientet = () => {
   const [clients, setClients] = useState([
     // { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
     // More people...
@@ -87,4 +88,6 @@ export default function Klientet() {
       </div>
     </div>
   );
-}
+};
+
+export default withAuth(Klientet);

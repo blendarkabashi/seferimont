@@ -6,8 +6,10 @@ import Overlay from "src/components/Overlay";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { formatCurrency } from "src/global/functions";
+import withAuth from "src/components/withAuth";
+import Loader from "src/components/Loader";
 
-export default function Kryefaqja() {
+const Kryefaqja = () => {
   const [stats, setStats] = useState();
   const [dueInvoices, setDueInvoices] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
@@ -89,4 +91,6 @@ export default function Kryefaqja() {
       )}
     </>
   );
-}
+};
+
+export default withAuth(Kryefaqja);

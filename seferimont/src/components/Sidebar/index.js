@@ -11,6 +11,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { classNames } from "src/global/functions";
 import Link from "next/link";
+import withAuth from "../withAuth";
 const Header = ({ sidebarOpen, setSidebarOpen }) => {
   const router = useRouter();
 
@@ -24,6 +25,12 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
     { id: 2, name: "Tailwind Labs", href: "#", initial: "T", current: false },
     { id: 3, name: "Workcation", href: "#", initial: "W", current: false },
   ];
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    router.push("/");
+  };
   return (
     <>
       <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -124,7 +131,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
                       <li className="mt-auto">
                         <a
                           href="#"
-                          onClick={() => router.push("/")}
+                          onClick={handleLogout}
                           className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white"
                         >
                           <ArrowLeftOnRectangleIcon className="h-6 w-6 shrink-0" aria-hidden="true" />
@@ -198,7 +205,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
                 </li> */}
               <li className="mt-auto">
                 <a
-                  onClick={() => router.push("/")}
+                  onClick={handleLogout}
                   href="#"
                   className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white"
                 >
@@ -214,4 +221,4 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
   );
 };
 
-export default Header;
+export default withAuth(Header);

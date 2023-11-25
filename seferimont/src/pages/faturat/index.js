@@ -3,30 +3,43 @@ import { useEffect, useState } from "react";
 import Loader from "src/components/Loader";
 import { formatDateString } from "src/global/functions";
 import { useRouter } from "next/router";
+import withAuth from "src/components/withAuth";
+import TrashIcon from "@heroicons/react/20/solid/TrashIcon";
+import DeleteInvoice from "src/components/Overlay/delete-invoice";
 
-export default function Faturat() {
+const Faturat = () => {
   const router = useRouter();
   const [invoices, setInvoices] = useState([
     // { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
     // More people...
   ]);
 
+  const [showDeleteInvoiceDialog, setShowDeleteInvoiceDialog] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [invoiceToDelete, setInvoiceToDelete] = useState(null);
+
   const [loadingData, setLoadingData] = useState(true);
 
+  const fetchInvoices = async () => {
+    try {
+      const result = await axios.get("http://localhost:1337/api/invoices?populate=*");
+      setInvoices(result.data.data.reverse());
+    } catch (error) {
+      console.error("Error fetching invoices:", error);
+    }
+    setLoadingData(false);
+  };
   useEffect(() => {
-    const fetchInvoices = async () => {
-      try {
-        const result = await axios.get("http://localhost:1337/api/invoices?populate=*");
-        setInvoices(result.data.data.reverse());
-      } catch (error) {
-        console.error("Error fetching invoices:", error);
-      }
-      setLoadingData(false);
-    };
-
     fetchInvoices();
   }, []);
 
+  const handleDeleteInvoice = async () => {
+    setDeleting(true);
+    await axios.delete("http://localhost:1337/api/invoices/" + invoiceToDelete);
+    setDeleting(false);
+    setShowDeleteInvoiceDialog(false);
+    fetchInvoices();
+  };
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
@@ -105,7 +118,11 @@ export default function Faturat() {
               <tbody>
                 {/* client.fullname client.phone_number plates invoice_due invoice_unpaid */}
                 {invoices.map((invoice, index) => (
-                  <tr key={invoice.attributes.id}>
+                  <tr
+                    key={invoice.attributes.id}
+                    className="hover:bg-blue-50 cursor-pointer"
+                    onClick={() => router.push(`/faturat/${invoice.id}`)}
+                  >
                     <td
                       className={classNames(
                         index !== invoices.length - 1 ? "border-b border-gray-200" : "",
@@ -170,11 +187,21 @@ export default function Faturat() {
                         "relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-8 lg:pr-8"
                       )}
                     >
-                      <a
+                      {/* <a
                         onClick={() => router.push(`/faturat/${invoice.id}`)}
                         className="text-indigo-600 hover:text-indigo-500 cursor-pointer"
                       >
                         Shiko detajet<span className="sr-only">, {invoice.attributes.name}</span>
+                      </a> */}
+                      <a
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          setInvoiceToDelete(invoice.id);
+                          setShowDeleteInvoiceDialog(true);
+                        }}
+                        className="text-red-600 hover:text-red-500 cursor-pointer"
+                      >
+                        Fshij Faturen<span className="sr-only">, {invoice.attributes.name}</span>
                       </a>
                     </td>
                   </tr>
@@ -184,6 +211,16 @@ export default function Faturat() {
           </div>
         </div>
       </div>
+      {showDeleteInvoiceDialog && (
+        <DeleteInvoice
+          loading={deleting}
+          onSubmit={handleDeleteInvoice}
+          open={showDeleteInvoiceDialog}
+          setOpen={setShowDeleteInvoiceDialog}
+        />
+      )}
     </div>
   );
-}
+};
+
+export default withAuth(Faturat);

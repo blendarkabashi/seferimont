@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
+import withAuth from "src/components/withAuth";
 
 // import { colourOptions } from '../data';
 
@@ -437,4 +438,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default withAuth(index);
