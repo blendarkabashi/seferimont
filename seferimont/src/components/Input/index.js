@@ -4,7 +4,7 @@ const Input = ({ readonly, required, onChange, inline, label, placeholder, type,
     return (
       <div>
         {label && (
-          <label htmlFor={name} className="block text-sm font-medium leading-6 text-gray-900">
+          <label htmlFor={name} className="block text-left text-sm font-medium leading-6 text-gray-900">
             {label}
           </label>
         )}
@@ -30,7 +30,7 @@ const Input = ({ readonly, required, onChange, inline, label, placeholder, type,
   return (
     <div>
       {label && (
-        <label htmlFor={name} className="block text-sm font-medium leading-6 text-gray-900">
+        <label htmlFor={name} className="block text-left text-sm font-medium leading-6 text-gray-900">
           {label}
         </label>
       )}

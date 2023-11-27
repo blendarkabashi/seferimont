@@ -82,7 +82,7 @@ const index = () => {
 
             <div class="inline-flex gap-x-2">
               <a
-                class=" cursor-pointer py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm"
+                class=" cursor-pointer py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 transition-all text-sm"
                 onClick={downloadPdfDocument}
               >
                 <svg

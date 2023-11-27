@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import withAuth from "src/components/withAuth";
+import AddClient from "src/components/Overlay/add-client";
 
 const Klientet = () => {
   const [clients, setClients] = useState([
     // { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
     // More people...
   ]);
+
+  const [showAddClientInvoice, setShowAddClientInvoice] = useState(false);
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -35,6 +38,7 @@ const Klientet = () => {
           <button
             type="button"
             className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            onClick={() => setShowAddClientInvoice(true)}
           >
             Shto Klientin
           </button>
@@ -86,6 +90,7 @@ const Klientet = () => {
           </div>
         </div>
       </div>
+      {showAddClientInvoice && <AddClient open={showAddClientInvoice} setOpen={setShowAddClientInvoice} />}
     </div>
   );
 };
