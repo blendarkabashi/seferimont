@@ -3,12 +3,14 @@ import { Menu, Transition } from "@headlessui/react";
 import { classNames, formatCurrency, formatDateString } from "src/global/functions";
 import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
-const RecentClients = ({ invoices }) => {
+import Input from "../Input";
+const RecentClients = ({ invoices, searchKey, setSearchKey, searchDueInvoices }) => {
   const router = useRouter();
   const statuses = {
     Paguar: "text-green-700 bg-green-50 ring-green-600/20",
     Papaguar: "text-red-700 bg-red-50 ring-red-600/10",
   };
+
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
@@ -17,6 +19,17 @@ const RecentClients = ({ invoices }) => {
           {/* <a href="#" className="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
                         View all<span className="sr-only">, clients</span>
                       </a> */}
+          <div className="">
+            <Input
+              onChange={(event) => {
+                setSearchKey(event.target.value);
+                searchDueInvoices();
+              }}
+              value={searchKey}
+              className="w-80"
+              placeholder={"Kerko fature specifike"}
+            />
+          </div>
         </div>
         <ul role="list" className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8">
           {invoices.reverse().map((invoice) => (

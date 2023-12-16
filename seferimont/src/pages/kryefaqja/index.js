@@ -8,6 +8,7 @@ import axios from "axios";
 import { formatCurrency } from "src/global/functions";
 import withAuth from "src/components/withAuth";
 import Loader from "src/components/Loader";
+import Input from "src/components/Input";
 
 const Kryefaqja = () => {
   const [stats, setStats] = useState();
@@ -59,6 +60,14 @@ const Kryefaqja = () => {
     fetchInvoices();
   }, []);
 
+  const [searchKey, setSearchKey] = useState("");
+
+  const searchDueInvoices = () => {
+    // setDueInvoices(
+    //   dueInvoices.filter((invoice) => searchKey.includes(invoice.attributes.client.data.attributes.fullname))
+    // );
+  };
+
   return (
     <>
       {loadingData ? (
@@ -85,7 +94,12 @@ const Kryefaqja = () => {
           </div>
           <div className="space-y-16 pt-6 xl:space-y-20">
             {/* RecentClients */}
-            <RecentClients invoices={dueInvoices} />
+            <RecentClients
+              searchKey={searchKey}
+              setSearchKey={setSearchKey}
+              searchDueInvoices={searchDueInvoices}
+              invoices={dueInvoices}
+            />
           </div>
         </div>
       )}

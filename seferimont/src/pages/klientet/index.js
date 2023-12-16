@@ -3,7 +3,9 @@ import axios from "axios";
 import withAuth from "src/components/withAuth";
 import AddClient from "src/components/Overlay/add-client";
 
+import { useRouter } from "next/router";
 const Klientet = () => {
+  const router = useRouter();
   const [clients, setClients] = useState([
     // { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
     // More people...
@@ -66,7 +68,11 @@ const Klientet = () => {
               </thead>
               <tbody>
                 {clients.map((client, index) => (
-                  <tr key={client.email}>
+                  <tr
+                    key={client.email}
+                    className="hover:bg-blue-50 cursor-pointer"
+                    onClick={() => router.push(`/klientet/${client.id}`)}
+                  >
                     <td
                       className={classNames(
                         index !== clients.length - 1 ? "border-b border-gray-200" : "",
