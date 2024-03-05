@@ -52,10 +52,10 @@ const index = () => {
   }, [invoiceTotal]);
 
   const getServices = async () => {
-    axios.get("http://localhost:1337/api/products").then((result) => {
-      const formattedServices = result.data.data.map((item) => ({
-        label: item.attributes.label,
-        value: item.id,
+    axios.get("http://localhost:9001/product").then((result) => {
+      const formattedServices = result.data.map((item) => ({
+        label: item.label,
+        value: item._id,
       }));
       setServices(formattedServices);
     });
@@ -106,7 +106,7 @@ const index = () => {
   };
 
   const handleSelect = (values) => {
-    setPhoneNumber(values.attributes.phone_number);
+    setPhoneNumber(values.phone_number);
   };
 
   const customStyles = {
@@ -165,8 +165,8 @@ const index = () => {
   };
   const addProductToAPI = async (productData) => {
     try {
-      const response = await axios.post("http://localhost:1337/api/products", {
-        data: productData,
+      const response = await axios.post("http://localhost:9001/product", {
+        label: productData.label,
       });
       console.log("Product added:", response.data);
     } catch (error) {
@@ -174,12 +174,13 @@ const index = () => {
     }
   };
 
-  const addClient = async (data) => {
+  const addClient = async (clientName, phone) => {
     try {
-      const response = await axios.post("http://localhost:1337/api/clients", {
-        data: data,
+      const response = await axios.post("http://localhost:9001/client", {
+        fullname: clientName,
+        phone_number: phone,
       });
-      return response.data.data.id;
+      return response.data._id;
     } catch (error) {
       console.error("Error adding client:", error);
     }
@@ -187,9 +188,7 @@ const index = () => {
 
   const addInvoice = async (data) => {
     try {
-      const response = await axios.post("http://localhost:1337/api/invoices", {
-        data: data,
-      });
+      const response = await axios.post("http://localhost:9001/invoice", data);
       setLoadingInvoice(false);
       router.push("/faturat");
       toast.success(`Fatura u shtua me sukses!`);
@@ -214,17 +213,17 @@ const index = () => {
 
     let clientId = client.id ? client.id : null;
     if (!client.id) {
-      clientId = await addClient({ fullname: client, phone_number: phoneNumber });
+      clientId = await addClient(client, phoneNumber);
     }
 
     let invoiceData = {
       client: clientId,
       plates: plates,
-      invoice_items: products,
-      invoice_due: date,
-      invoice_paid: paidAmount,
-      invoice_total: invoiceTotal,
-      invoice_unpaid: invoiceTotal - paidAmount,
+      items: products,
+      due: date,
+      paid: paidAmount,
+      total: invoiceTotal,
+      unpaid: invoiceTotal - paidAmount,
     };
     setLoadingInvoice(true);
     await addInvoice(invoiceData);

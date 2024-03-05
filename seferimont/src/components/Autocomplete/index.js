@@ -15,7 +15,7 @@ export default function Autocomplete({ required, selectedClient, setSelectedClie
         _filteredClients = [...clients];
       } else {
         _filteredClients = clients.filter((client) => {
-          return client.attributes.fullname.toLowerCase().startsWith(event.query.toLowerCase());
+          return client.fullname.toLowerCase().startsWith(event.query.toLowerCase());
         });
       }
       setFilteredClients(_filteredClients);
@@ -23,7 +23,7 @@ export default function Autocomplete({ required, selectedClient, setSelectedClie
   };
 
   const getClients = async () => {
-    axios.get("http://localhost:1337/api/clients").then((results) => setClients(results.data.data));
+    axios.get("http://localhost:9001/client").then((results) => setClients(results.data));
   };
 
   useEffect(() => {
@@ -36,11 +36,11 @@ export default function Autocomplete({ required, selectedClient, setSelectedClie
   }, []);
 
   const clientTemplate = (client) => {
-    return `${client.attributes.fullname}`;
+    return `${client.fullname}`;
   };
 
   const valueTemplate = (client) => {
-    return client ? `${client.attributes.fullname}` : "";
+    return client ? `${client.fullname}` : "";
   };
 
   return (
@@ -57,7 +57,7 @@ export default function Autocomplete({ required, selectedClient, setSelectedClie
         completeMethod={search}
         onChange={(event) => setSelectedClient(event.value)}
         valueTemplate={valueTemplate}
-        field="attributes.fullname"
+        field="fullname"
         onSelect={onSelect}
         showEmptyMessage={true}
         emptyMessage="Nuk ka klient te regjistruar me kete emer"

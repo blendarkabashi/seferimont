@@ -13,20 +13,21 @@ export default function Home() {
   const [identifier, setIdentifier] = useState();
   const [password, setPassword] = useState();
   const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await axios.post("http://localhost:1337/api/auth/local", {
-        identifier: identifier,
+      const response = await axios.post("http://localhost:9001/user/login", {
+        email: identifier,
         password: password,
       });
       setLoading(false);
       dispatch(setUser(response.data.user));
 
-      let { user, jwt } = response.data;
+      let { token, user } = response.data;
       localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("token", jwt);
+      localStorage.setItem("token", token);
 
       // axios.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
       console.log(axios.defaults.headers);

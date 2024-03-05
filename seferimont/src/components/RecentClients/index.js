@@ -33,10 +33,11 @@ const RecentClients = ({ invoices, searchKey, setSearchKey, searchDueInvoices })
         </div>
         <ul role="list" className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8">
           {invoices.reverse().map((invoice) => (
-            <li key={invoice.id} className="overflow-hidden rounded-xl border border-gray-200">
+            <li key={invoice._id} className="overflow-hidden rounded-xl border border-gray-200">
               <div className="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 px-6 py-3">
                 <div className="text-sm font-medium leading-6 text-gray-900">
-                  {invoice.attributes.client.data.attributes.fullname}
+                  {invoice.client.fullname}
+                  {/* add full client object here  */}
                 </div>
                 <Menu as="div" className="relative ml-auto">
                   <Menu.Button className="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500">
@@ -62,7 +63,7 @@ const RecentClients = ({ invoices, searchKey, setSearchKey, searchDueInvoices })
                               "cursor-pointer block px-3 py-1 text-sm leading-6 text-gray-900"
                             )}
                           >
-                            Shiko detajet<span className="sr-only">, {invoice.id}</span>
+                            Shiko detajet<span className="sr-only">, {invoice._id}</span>
                           </a>
                         )}
                       </Menu.Item>
@@ -87,13 +88,13 @@ const RecentClients = ({ invoices, searchKey, setSearchKey, searchDueInvoices })
                 <div className="flex justify-between gap-x-4 py-3">
                   <dt className="text-gray-500">Data e fatures</dt>
                   <dd className="text-gray-700">
-                    <time>{formatDateString(invoice.attributes.invoice_due)}</time>
+                    <time>{formatDateString(invoice.due)}</time>
                   </dd>
                 </div>
                 <div className="flex justify-between gap-x-4 py-3">
                   <dt className="text-gray-500">Shuma</dt>
                   <dd className="flex items-start gap-x-2">
-                    <div className="font-medium text-gray-900">{formatCurrency(invoice.attributes.invoice_unpaid)}</div>
+                    <div className="font-medium text-gray-900">{formatCurrency(invoice.unpaid)}</div>
                     <div
                       className={
                         "text-red-700 bg-red-50 ring-red-600/10 rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset"
@@ -105,7 +106,7 @@ const RecentClients = ({ invoices, searchKey, setSearchKey, searchDueInvoices })
                 </div>
                 <div className="flex justify-between gap-x-4 py-3">
                   <dt className="text-gray-500">Numri i telefonit</dt>
-                  <dd className="text-gray-700">{invoice.attributes.client.data.attributes.phone_number}</dd>
+                  <dd className="text-gray-700">{invoice.client.phone_number}</dd>
                 </div>
               </dl>
             </li>

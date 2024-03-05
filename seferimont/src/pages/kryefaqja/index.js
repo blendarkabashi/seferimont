@@ -9,8 +9,10 @@ import { formatCurrency } from "src/global/functions";
 import withAuth from "src/components/withAuth";
 import Loader from "src/components/Loader";
 import Input from "src/components/Input";
+import { useSelector } from "react-redux";
 
 const Kryefaqja = () => {
+  const user = useSelector((state) => state.global.user);
   const [stats, setStats] = useState();
   const [dueInvoices, setDueInvoices] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
@@ -21,9 +23,9 @@ const Kryefaqja = () => {
     let invoicePaid = 0;
 
     invoices.forEach((invoice) => {
-      invoiceTotal += invoice.attributes.invoice_total;
-      invoiceUnpaid += invoice.attributes.invoice_unpaid;
-      invoicePaid += invoice.attributes.invoice_paid;
+      invoiceTotal += invoice.total;
+      invoiceUnpaid += invoice.unpaid;
+      invoicePaid += invoice.paid;
     });
 
     setStats([
@@ -36,8 +38,8 @@ const Kryefaqja = () => {
     const today = new Date();
 
     const dueInvoices = invoices.filter((invoice) => {
-      const dueDate = new Date(invoice.attributes.invoice_due);
-      const unpaidAmount = invoice.attributes.invoice_unpaid;
+      const dueDate = new Date(invoice.due);
+      const unpaidAmount = invoice.unpaid;
 
       return dueDate <= today && unpaidAmount !== 0;
     });
@@ -47,10 +49,10 @@ const Kryefaqja = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const result = await axios.get("http://localhost:1337/api/invoices?populate=*");
-        setInvoices(result.data.data);
-        calculateInvoiceTotals(result.data.data);
-        filterUnpaidInvoices(result.data.data);
+        const result = await axios.get(`http://localhost:9001/invoice?clientId=${user.userId}`);
+        setInvoices(result.data);
+        calculateInvoiceTotals(result.data);
+        filterUnpaidInvoices(result.data);
         setLoadingData(false);
       } catch (error) {
         console.error("Error fetching invoices:", error);
