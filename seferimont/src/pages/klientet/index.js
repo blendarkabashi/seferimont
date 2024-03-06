@@ -20,8 +20,8 @@ const Klientet = () => {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const result = await axios.get("http://localhost:1337/api/clients");
-        setClients(result.data.data);
+        const result = await axios.get("http://localhost:9001/client");
+        setClients(result.data);
       } catch (error) {
         console.error("Error fetching clients:", error);
       }
@@ -71,7 +71,7 @@ const Klientet = () => {
                   <tr
                     key={client.email}
                     className="hover:bg-blue-50 cursor-pointer"
-                    onClick={() => router.push(`/klientet/${client.id}`)}
+                    onClick={() => router.push(`/klientet/${client._id}`)}
                   >
                     <td
                       className={classNames(
@@ -79,7 +79,7 @@ const Klientet = () => {
                         "whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
                       )}
                     >
-                      {client.attributes.fullname}
+                      {client.fullname}
                     </td>
                     <td
                       className={classNames(
@@ -87,7 +87,7 @@ const Klientet = () => {
                         "whitespace-nowrap hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
                       )}
                     >
-                      {client.attributes.phone_number}
+                      {client.phone_number}
                     </td>
                   </tr>
                 ))}

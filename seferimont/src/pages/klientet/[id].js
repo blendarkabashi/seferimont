@@ -15,9 +15,9 @@ const index = () => {
   useEffect(() => {
     const fetchClient = async () => {
       try {
-        const result = await axios.get(`http://localhost:1337/api/clients/${id}?populate=*`);
-        setClient(result.data.data.attributes);
-        calculateInvoiceTotals(result.data.data.attributes.invoices.data);
+        const result = await axios.get(`http://localhost:9001/client/${id}`);
+        setClient(result.data);
+        calculateInvoiceTotals(result.data.invoices);
       } catch (error) {
         console.error("Error fetching client:", error);
       } finally {
@@ -36,9 +36,9 @@ const index = () => {
     let invoicePaid = 0;
 
     invoices.forEach((invoice) => {
-      invoiceTotal += invoice.attributes.invoice_total;
-      invoiceUnpaid += invoice.attributes.invoice_unpaid;
-      invoicePaid += invoice.attributes.invoice_paid;
+      invoiceTotal += invoice.total;
+      invoiceUnpaid += invoice.unpaid;
+      invoicePaid += invoice.paid;
     });
 
     setTotalInvoices(formatCurrency(invoiceTotal));
@@ -70,7 +70,7 @@ const index = () => {
                 <dl class="grid sm:flex gap-x-3 text-sm">
                   <dt class="min-w-[150px] max-w-[200px] text-gray-500">Fatura ne total:</dt>
                   <dd class="text-gray-800 ">
-                    <span class="block font-semibold">{client.invoices.data.length}</span>
+                    <span class="block font-semibold">{client.invoices.length}</span>
                   </dd>
                 </dl>
                 <dl class="grid sm:flex gap-x-3 text-sm">
@@ -88,7 +88,7 @@ const index = () => {
               </div>
             </div>
           </div>
-          {!client.invoices.data.length ? (
+          {!client.invoices.length ? (
             <div className="rounded-md bg-blue-50 p-4 mt-6">
               <div className="flex">
                 <div className="flex-shrink-0">
@@ -143,57 +143,55 @@ const index = () => {
               </thead>
               <tbody>
                 {/* client.fullname client.phone_number plates invoice_due invoice_unpaid */}
-                {client.invoices.data.map((invoice, index) => (
+                {client.invoices.map((invoice, index) => (
                   <tr
-                    key={invoice.attributes.id}
+                    key={invoice._id}
                     className="hover:bg-blue-50 cursor-pointer"
-                    onClick={() => router.push(`/faturat/${invoice.id}`)}
+                    onClick={() => router.push(`/faturat/${invoice._id}`)}
                   >
                     <td
                       className={classNames(
-                        index !== client.invoices.data.length - 1 ? "border-b border-gray-200" : "",
+                        index !== client.invoices.length - 1 ? "border-b border-gray-200" : "",
                         "whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-500 sm:pl-6 lg:pl-8"
                       )}
                     >
-                      {invoice.id}
+                      {invoice._id}
                     </td>
                     <td
                       className={classNames(
-                        index !== client.invoices.data.length - 1 ? "border-b border-gray-200" : "",
+                        index !== client.invoices.length - 1 ? "border-b border-gray-200" : "",
                         "whitespace-nowrap hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                       )}
                     >
-                      {invoice.attributes.plates ? invoice.attributes.plates : "-"}
+                      {invoice.plates ? invoice.plates : "-"}
                     </td>
                     <td
                       className={classNames(
-                        index !== client.invoices.data.length - 1 ? "border-b border-gray-200" : "",
+                        index !== client.invoices.length - 1 ? "border-b border-gray-200" : "",
                         "whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                       )}
                     >
-                      {formatDateString(invoice.attributes.invoice_due)}
+                      {formatDateString(invoice.due)}
                     </td>
                     <td
                       className={classNames(
-                        index !== client.invoices.data.length - 1 ? "border-b border-gray-200" : "",
-                        `whitespace-nowrap px-3 py-4 text-sm ${
-                          invoice.attributes.invoice_unpaid > 0 ? "text-red-500" : "text-green-500"
-                        }`
+                        index !== client.invoices.length - 1 ? "border-b border-gray-200" : "",
+                        `whitespace-nowrap px-3 py-4 text-sm ${invoice.unpaid > 0 ? "text-red-500" : "text-green-500"}`
                       )}
                     >
-                      €{invoice.attributes.invoice_unpaid}
+                      €{invoice.unpaid}
                     </td>
                     <td
                       className={classNames(
-                        index !== client.invoices.data.length - 1 ? "border-b border-gray-200" : "",
+                        index !== client.invoices.length - 1 ? "border-b border-gray-200" : "",
                         "whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                       )}
                     >
-                      €{invoice.attributes.invoice_total}
+                      €{invoice.total}
                     </td>
                     <td
                       className={classNames(
-                        index !== client.invoices.data.length - 1 ? "border-b border-gray-200" : "",
+                        index !== client.invoices.length - 1 ? "border-b border-gray-200" : "",
                         "relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-8 lg:pr-8"
                       )}
                     >
@@ -206,12 +204,12 @@ const index = () => {
                       <a
                         onClick={(event) => {
                           event.stopPropagation();
-                          setInvoiceToDelete(invoice.id);
+                          setInvoiceToDelete(invoice._id);
                           setShowDeleteInvoiceDialog(true);
                         }}
                         className="text-red-600 hover:text-red-500 cursor-pointer"
                       >
-                        Fshij Faturen<span className="sr-only">, {invoice.attributes.name}</span>
+                        Fshij Faturen<span className="sr-only">, {invoice.name}</span>
                       </a>
                     </td>
                   </tr>

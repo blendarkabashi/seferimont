@@ -57,7 +57,7 @@ const RecentClients = ({ invoices, searchKey, setSearchKey, searchDueInvoices })
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            onClick={() => router.push(`/faturat/${invoice.id}`)}
+                            onClick={() => router.push(`/faturat/${invoice._id}`)}
                             className={classNames(
                               active ? "bg-gray-50" : "",
                               "cursor-pointer block px-3 py-1 text-sm leading-6 text-gray-900"
