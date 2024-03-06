@@ -211,8 +211,8 @@ const index = () => {
       addProductToAPI(element);
     });
 
-    let clientId = client.id ? client.id : null;
-    if (!client.id) {
+    let clientId = client._id ? client._id : null;
+    if (!client._id) {
       clientId = await addClient(client, phoneNumber);
     }
 

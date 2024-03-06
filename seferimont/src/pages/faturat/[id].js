@@ -48,15 +48,15 @@ const index = () => {
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", [pdfWidth, pdfHeight]);
       pdf.addImage(imgData, "PNG", 0, 0, pdfCanvasWidth, pdfCanvasHeight);
-      pdf.save(`Fature - ${invoice.client.data.attributes.fullname}-${formatDateString(Date.now())}.pdf`);
+      pdf.save(`Fature - ${invoice.client.fullname}-${formatDateString(Date.now())}.pdf`);
     });
   };
 
   useEffect(() => {
     const fetchInvoice = async () => {
       try {
-        const result = await axios.get(`http://localhost:1337/api/invoices/${id}?populate=*`);
-        setInvoice(result.data.data.attributes);
+        const result = await axios.get(`http://localhost:9001/invoice/${id}`);
+        setInvoice(result.data);
       } catch (error) {
         console.error("Error fetching invoice:", error);
       } finally {
@@ -77,7 +77,7 @@ const index = () => {
         <div class="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto my-4 sm:my-10">
           <div class="mb-5 pb-5 flex justify-between items-center border-b border-gray-200 ">
             <div>
-              <h2 class="text-2xl font-semibold text-gray-800 ">Fatura #{id}</h2>
+              <h2 class="text-2xl font-semibold text-gray-800 ">Detajet e fatures</h2>
             </div>
 
             <div class="inline-flex gap-x-2">
@@ -134,14 +134,14 @@ const index = () => {
                 <dl class="grid sm:flex gap-x-3 text-sm">
                   <dt class="min-w-[150px] max-w-[200px] text-gray-500">Fature per:</dt>
                   <dd class="text-gray-800 ">
-                    <span class="block font-semibold">{invoice.client.data.attributes.fullname}</span>
+                    <span class="block font-semibold">{invoice.client.fullname}</span>
                   </dd>
                 </dl>
 
                 <dl class="grid sm:flex gap-x-3 text-sm">
                   <dt class="min-w-[150px] max-w-[200px] text-gray-500">Numri i telefonit:</dt>
                   <dd class="text-gray-800 ">
-                    <span class="block font-semibold">{invoice.client.data.attributes.phone_number}</span>
+                    <span class="block font-semibold">{invoice.client.phone_number}</span>
                   </dd>
                 </dl>
                 {invoice.plates && (
@@ -158,13 +158,13 @@ const index = () => {
             <div>
               <div class="grid space-y-3">
                 <dl class="grid sm:flex gap-x-3 text-sm">
-                  <dt class="min-w-[150px] max-w-[200px] text-gray-500">Numri i fatures:</dt>
+                  <dt class="min-w-[150px] max-w-[200px] text-gray-500">Numri unik i fatures:</dt>
                   <dd class="font-medium text-gray-800 ">{id}</dd>
                 </dl>
 
                 <dl class="grid sm:flex gap-x-3 text-sm">
                   <dt class="min-w-[150px] max-w-[200px] text-gray-500">Data e pageses:</dt>
-                  <dd class="font-medium text-gray-800 ">{formatDateString(invoice.invoice_due)}</dd>
+                  <dd class="font-medium text-gray-800 ">{formatDateString(invoice.due)}</dd>
                 </dl>
               </div>
             </div>
@@ -180,7 +180,7 @@ const index = () => {
 
             <div class="hidden sm:block border-b border-gray-200 "></div>
 
-            {invoice.invoice_items.map((item, index) => (
+            {invoice.items.map((item, index) => (
               <>
                 <div class="grid grid-cols-3 sm:grid-cols-5 gap-2">
                   <div class="col-span-full sm:col-span-2">
@@ -201,7 +201,7 @@ const index = () => {
                   </div>
                 </div>
 
-                {invoice.invoice_items.length != index && <div class="sm:hidden border-b border-gray-200 "></div>}
+                {invoice.items.length != index && <div class="sm:hidden border-b border-gray-200 "></div>}
               </>
             ))}
           </div>
@@ -211,17 +211,17 @@ const index = () => {
               <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
                 <dl class="grid sm:grid-cols-5 gap-x-3 text-sm">
                   <dt class="col-span-3 text-gray-500">Totali:</dt>
-                  <dd class="col-span-2 font-medium text-gray-800 ">€{invoice.invoice_total}</dd>
+                  <dd class="col-span-2 font-medium text-gray-800 ">€{invoice.total}</dd>
                 </dl>
 
                 <dl class="grid sm:grid-cols-5 gap-x-3 text-sm">
                   <dt class="col-span-3 text-gray-500">E paguar:</dt>
-                  <dd class="col-span-2 font-medium text-gray-800 ">€{invoice.invoice_paid}</dd>
+                  <dd class="col-span-2 font-medium text-gray-800 ">€{invoice.paid}</dd>
                 </dl>
 
                 <dl class="grid sm:grid-cols-5 gap-x-3 text-sm">
                   <dt class="col-span-3 text-gray-500">Borxhi:</dt>
-                  <dd class="col-span-2 font-medium text-gray-800 ">€{invoice.invoice_unpaid}</dd>
+                  <dd class="col-span-2 font-medium text-gray-800 ">€{invoice.unpaid}</dd>
                 </dl>
               </div>
             </div>

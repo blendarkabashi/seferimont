@@ -49,7 +49,7 @@ const Kryefaqja = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const result = await axios.get(`http://localhost:9001/invoice?clientId=${user.userId}`);
+        const result = await axios.get(`http://localhost:9001/invoice`);
         setInvoices(result.data);
         calculateInvoiceTotals(result.data);
         filterUnpaidInvoices(result.data);

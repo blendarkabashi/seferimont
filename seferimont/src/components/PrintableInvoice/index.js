@@ -25,18 +25,18 @@ const PrintableInvoice = ({ invoice }) => {
         <div class="mt-8 grid sm:grid-cols-2 gap-3">
           <div>
             <h3 class="text-lg font-semibold text-gray-800 ">Emri i klientit:</h3>
-            <h3 class="text-lg font-semibold text-gray-800 ">{invoice.client.data.attributes.fullname}</h3>
+            <h3 class="text-lg font-semibold text-gray-800 ">{invoice.client.fullname}</h3>
           </div>
 
           <div class="sm:text-end space-y-2">
             <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
               <dl class="grid sm:grid-cols-5 gap-x-3">
                 <dt class="col-span-3 font-semibold text-gray-800 ">Data e fundit per pagese:</dt>
-                <dd class="col-span-2 text-gray-500">{formatDateString(invoice.invoice_due)}</dd>
+                <dd class="col-span-2 text-gray-500">{formatDateString(invoice.due)}</dd>
               </dl>
               <dl class="grid sm:grid-cols-5 gap-x-3">
                 <dt class="col-span-3 font-semibold text-gray-800 ">Numri i telefonit:</dt>
-                <dd class="col-span-2 text-gray-500">{invoice.client.data.attributes.phone_number}</dd>
+                <dd class="col-span-2 text-gray-500">{invoice.client.phone_number}</dd>
               </dl>
               {invoice.plates && (
                 <dl class="grid sm:grid-cols-5 gap-x-3">
@@ -59,7 +59,7 @@ const PrintableInvoice = ({ invoice }) => {
 
             <div class="hidden sm:block border-b border-gray-200 "></div>
 
-            {invoice.invoice_items.map((item, index) => (
+            {invoice.items.map((item, index) => (
               <>
                 <div class="grid grid-cols-3 sm:grid-cols-5 gap-2">
                   <div class="col-span-full sm:col-span-2">
@@ -80,7 +80,7 @@ const PrintableInvoice = ({ invoice }) => {
                   </div>
                 </div>
 
-                {invoice.invoice_items.length != index && <div class="sm:hidden border-b border-gray-200 "></div>}
+                {invoice.items.length != index && <div class="sm:hidden border-b border-gray-200 "></div>}
               </>
             ))}
           </div>
@@ -91,17 +91,17 @@ const PrintableInvoice = ({ invoice }) => {
             <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
               <dl class="grid sm:grid-cols-5 gap-x-3">
                 <dt class="col-span-3 font-semibold text-gray-800 ">Totali:</dt>
-                <dd class="col-span-2 text-gray-500">€{invoice.invoice_total}</dd>
+                <dd class="col-span-2 text-gray-500">€{invoice.total}</dd>
               </dl>
 
               <dl class="grid sm:grid-cols-5 gap-x-3">
                 <dt class="col-span-3 font-semibold text-gray-800 ">E paguar:</dt>
-                <dd class="col-span-2 text-gray-500">€{invoice.invoice_paid}</dd>
+                <dd class="col-span-2 text-gray-500">€{invoice.paid}</dd>
               </dl>
 
               <dl class="grid sm:grid-cols-5 gap-x-3">
                 <dt class="col-span-3 font-semibold text-gray-800 ">Borxhi:</dt>
-                <dd class="col-span-2 text-gray-500">€{invoice.invoice_unpaid}</dd>
+                <dd class="col-span-2 text-gray-500">€{invoice.unpaid}</dd>
               </dl>
             </div>
           </div>

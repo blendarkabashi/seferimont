@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import withAuth from "src/components/withAuth";
 import TrashIcon from "@heroicons/react/20/solid/TrashIcon";
 import DeleteInvoice from "src/components/Overlay/delete-invoice";
+import { useSelector } from "react-redux";
 
 const Faturat = () => {
   const router = useRouter();
@@ -13,7 +14,7 @@ const Faturat = () => {
     // { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
     // More people...
   ]);
-
+  const user = useSelector((state) => state.global.user);
   const [showDeleteInvoiceDialog, setShowDeleteInvoiceDialog] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [invoiceToDelete, setInvoiceToDelete] = useState(null);
@@ -22,8 +23,8 @@ const Faturat = () => {
 
   const fetchInvoices = async () => {
     try {
-      const result = await axios.get("http://localhost:1337/api/invoices?populate=*");
-      setInvoices(result.data.data.reverse());
+      const result = await axios.get(`http://localhost:9001/invoice`);
+      setInvoices(result.data.reverse());
     } catch (error) {
       console.error("Error fetching invoices:", error);
     }
@@ -35,7 +36,7 @@ const Faturat = () => {
 
   const handleDeleteInvoice = async () => {
     setDeleting(true);
-    await axios.delete("http://localhost:1337/api/invoices/" + invoiceToDelete);
+    await axios.delete(`http://localhost:9001/invoice/${invoiceToDelete}`);
     setDeleting(false);
     setShowDeleteInvoiceDialog(false);
     fetchInvoices();
@@ -119,9 +120,9 @@ const Faturat = () => {
                 {/* client.fullname client.phone_number plates invoice_due invoice_unpaid */}
                 {invoices.map((invoice, index) => (
                   <tr
-                    key={invoice.attributes.id}
+                    key={invoice._id}
                     className="hover:bg-blue-50 cursor-pointer"
-                    onClick={() => router.push(`/faturat/${invoice.id}`)}
+                    onClick={() => router.push(`/faturat/${invoice._id}`)}
                   >
                     <td
                       className={classNames(
@@ -129,7 +130,7 @@ const Faturat = () => {
                         "whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-500 sm:pl-6 lg:pl-8"
                       )}
                     >
-                      {invoice.id}
+                      {index + 1}
                     </td>
                     <td
                       className={classNames(
@@ -137,7 +138,7 @@ const Faturat = () => {
                         "whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
                       )}
                     >
-                      {invoice.attributes.client.data.attributes.fullname}
+                      {invoice.client.fullname}
                     </td>
                     <td
                       className={classNames(
@@ -145,7 +146,7 @@ const Faturat = () => {
                         "whitespace-nowrap hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
                       )}
                     >
-                      {invoice.attributes.client.data.attributes.phone_number}
+                      {invoice.client.phone_number}
                     </td>
                     <td
                       className={classNames(
@@ -153,7 +154,7 @@ const Faturat = () => {
                         "whitespace-nowrap hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                       )}
                     >
-                      {invoice.attributes.plates ? invoice.attributes.plates : "-"}
+                      {invoice.plates ? invoice.plates : "-"}
                     </td>
                     <td
                       className={classNames(
@@ -161,17 +162,15 @@ const Faturat = () => {
                         "whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                       )}
                     >
-                      {formatDateString(invoice.attributes.invoice_due)}
+                      {formatDateString(invoice.due)}
                     </td>
                     <td
                       className={classNames(
                         index !== invoices.length - 1 ? "border-b border-gray-200" : "",
-                        `whitespace-nowrap px-3 py-4 text-sm ${
-                          invoice.attributes.invoice_unpaid > 0 ? "text-red-500" : "text-green-500"
-                        }`
+                        `whitespace-nowrap px-3 py-4 text-sm ${invoice.unpaid > 0 ? "text-red-500" : "text-green-500"}`
                       )}
                     >
-                      €{invoice.attributes.invoice_unpaid}
+                      €{invoice.unpaid}
                     </td>
                     <td
                       className={classNames(
@@ -179,7 +178,7 @@ const Faturat = () => {
                         "whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                       )}
                     >
-                      €{invoice.attributes.invoice_total}
+                      €{invoice.total}
                     </td>
                     <td
                       className={classNames(
@@ -196,12 +195,12 @@ const Faturat = () => {
                       <a
                         onClick={(event) => {
                           event.stopPropagation();
-                          setInvoiceToDelete(invoice.id);
+                          setInvoiceToDelete(invoice._id);
                           setShowDeleteInvoiceDialog(true);
                         }}
                         className="text-red-600 hover:text-red-500 cursor-pointer"
                       >
-                        Fshij Faturen<span className="sr-only">, {invoice.attributes.name}</span>
+                        Fshij Faturen<span className="sr-only">, {invoice.name}</span>
                       </a>
                     </td>
                   </tr>
