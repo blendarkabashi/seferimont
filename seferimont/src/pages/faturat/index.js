@@ -24,7 +24,7 @@ const Faturat = () => {
   const fetchInvoices = async () => {
     try {
       const result = await axios.get(`http://localhost:9001/invoice`);
-      setInvoices(result.data.reverse());
+      setInvoices(result.data.filter((item) => !item.deleted).reverse());
     } catch (error) {
       console.error("Error fetching invoices:", error);
     }
