@@ -45,7 +45,12 @@ const AddClient = ({ onSubmit, open, setOpen, loading }) => {
         </div>
       </div>
       <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-        <Button className="inline-flex w-full sm:w-auto sm:ml-3" loading={loading} success onClick={onSubmit}>
+        <Button
+          className="inline-flex w-full sm:w-auto sm:ml-3"
+          loading={loading}
+          success
+          onClick={() => onSubmit({ fullname: fullName, email: email, phone_number: phoneNumber })}
+        >
           Shto klientin
         </Button>
         <button

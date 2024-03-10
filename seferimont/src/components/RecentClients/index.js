@@ -1,10 +1,10 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { classNames, formatCurrency, formatDateString } from "src/global/functions";
-import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
+import { EllipsisHorizontalIcon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
 import Input from "../Input";
-const RecentClients = ({ invoices, searchKey, setSearchKey, searchDueInvoices }) => {
+const RecentClients = ({ invoices, searchKey, setSearchKey }) => {
   const router = useRouter();
   const statuses = {
     Paguar: "text-green-700 bg-green-50 ring-green-600/20",
@@ -23,9 +23,9 @@ const RecentClients = ({ invoices, searchKey, setSearchKey, searchDueInvoices })
             <Input
               onChange={(event) => {
                 setSearchKey(event.target.value);
-                searchDueInvoices();
               }}
               value={searchKey}
+              iconBefore={<MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />}
               className="w-80"
               placeholder={"Kerko fature specifike"}
             />

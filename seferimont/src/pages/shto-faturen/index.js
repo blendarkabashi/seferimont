@@ -174,6 +174,25 @@ const index = () => {
     }
   };
 
+  const getClient = async (clientId) => {
+    try {
+      const response = axios.get(`http://localhost:9001/client/${clientId}`);
+      return response;
+    } catch (error) {
+      console.error("Error getting client:", error);
+    }
+  };
+
+  const updateClient = (clientId, invoices) => {
+    try {
+      const response = axios.put(`http://localhost:9001/client/${clientId}`, {
+        invoices: invoices,
+      });
+    } catch (error) {
+      console.error("Error updating client:", error);
+    }
+  };
+
   const addClient = async (clientName, phone) => {
     try {
       const response = await axios.post("http://localhost:9001/client", {
@@ -192,6 +211,7 @@ const index = () => {
       setLoadingInvoice(false);
       router.push("/faturat");
       toast.success(`Fatura u shtua me sukses!`);
+      return response.data;
     } catch (error) {
       toast.success(`Ka nje problem ne sistem. Fatura nuk eshte shtuar, provojeni prape me vone!`);
       console.error("Error adding invoice:", error);
@@ -216,6 +236,8 @@ const index = () => {
       clientId = await addClient(client, phoneNumber);
     }
 
+    let clientObject = await getClient(clientId);
+
     let invoiceData = {
       client: clientId,
       plates: plates,
@@ -225,8 +247,12 @@ const index = () => {
       total: invoiceTotal,
       unpaid: invoiceTotal - paidAmount,
     };
+
     setLoadingInvoice(true);
-    await addInvoice(invoiceData);
+    let addedInvoice = await addInvoice(invoiceData);
+    clientObject.data.invoices.push(addedInvoice._id);
+    let invoices = clientObject.data.invoices;
+    updateClient(clientId, invoices);
   };
 
   return (

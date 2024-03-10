@@ -15,6 +15,7 @@ const Kryefaqja = () => {
   const user = useSelector((state) => state.global.user);
   const [stats, setStats] = useState();
   const [dueInvoices, setDueInvoices] = useState([]);
+  const [dueInvoicesOriginal, setDueInvoicesOriginal] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
   const [invoices, setInvoices] = useState([]);
   const calculateInvoiceTotals = (invoices) => {
@@ -45,6 +46,7 @@ const Kryefaqja = () => {
     });
 
     setDueInvoices(dueInvoices);
+    setDueInvoicesOriginal(dueInvoices);
   };
   useEffect(() => {
     const fetchInvoices = async () => {
@@ -64,11 +66,12 @@ const Kryefaqja = () => {
 
   const [searchKey, setSearchKey] = useState("");
 
-  const searchDueInvoices = () => {
-    // setDueInvoices(
-    //   dueInvoices.filter((invoice) => searchKey.includes(invoice.attributes.client.data.attributes.fullname))
-    // );
-  };
+  useEffect(() => {
+    let filteredInvoices = dueInvoicesOriginal.filter((invoice) =>
+      invoice.client.fullname.toLowerCase().includes(searchKey.toLowerCase())
+    );
+    setDueInvoices(filteredInvoices);
+  }, [searchKey]);
 
   return (
     <>
@@ -96,12 +99,7 @@ const Kryefaqja = () => {
           </div>
           <div className="space-y-16 pt-6 xl:space-y-20">
             {/* RecentClients */}
-            <RecentClients
-              searchKey={searchKey}
-              setSearchKey={setSearchKey}
-              searchDueInvoices={searchDueInvoices}
-              invoices={dueInvoices}
-            />
+            <RecentClients searchKey={searchKey} setSearchKey={setSearchKey} invoices={dueInvoices} />
           </div>
         </div>
       )}
