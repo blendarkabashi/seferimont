@@ -3,24 +3,27 @@ import { Menu, Transition } from "@headlessui/react";
 import { classNames } from "src/global/functions";
 import { Bars3Icon, BellIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { DocumentDuplicateIcon, UsersIcon } from "@heroicons/react/24/outline";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { setUser } from "src/store/global";
 
 const MainMenu = ({ setSidebarOpen }) => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const userNavigation = [{ name: "Dil nga aplikacioni", href: "#" }];
   const user = useSelector((state) => state.global.user);
   const [name, setName] = useState("");
 
   useEffect(() => {
-    setName(user.name);
+    setName(user?.name);
   }, [user]);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     router.push("/");
+    dispatch(setUser(null));
   };
 
   return (

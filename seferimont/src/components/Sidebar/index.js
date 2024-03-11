@@ -12,7 +12,10 @@ import {
 import { classNames } from "src/global/functions";
 import Link from "next/link";
 import withAuth from "../withAuth";
+import { useDispatch } from "react-redux";
+import { setUser } from "src/store/global";
 const Header = ({ sidebarOpen, setSidebarOpen }) => {
+  const dispatch = useDispatch();
   const router = useRouter();
 
   const navigation = [
@@ -30,6 +33,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     router.push("/");
+    dispatch(setUser(null));
   };
   return (
     <>

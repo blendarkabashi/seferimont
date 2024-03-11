@@ -1,8 +1,8 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "src/store/global";
 import Button from "src/components/Button";
 import toast from "react-hot-toast";
@@ -13,6 +13,11 @@ export default function Home() {
   const [identifier, setIdentifier] = useState();
   const [password, setPassword] = useState();
   const [loading, setLoading] = useState(false);
+  const user = useSelector((state) => state.global.user);
+
+  useEffect(() => {
+    if (user?.userId) router.push("/kryefaqja");
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +29,6 @@ export default function Home() {
       });
       setLoading(false);
       dispatch(setUser(response.data.user));
-
       let { token, user } = response.data;
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("token", token);
