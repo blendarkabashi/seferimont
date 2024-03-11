@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { classNames } from "src/global/functions";
 import { Bars3Icon, BellIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
@@ -11,6 +11,17 @@ const MainMenu = ({ setSidebarOpen }) => {
   const router = useRouter();
   const userNavigation = [{ name: "Dil nga aplikacioni", href: "#" }];
   const user = useSelector((state) => state.global.user);
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    setName(user.name);
+  }, [user]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    router.push("/");
+  };
 
   return (
     <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
@@ -71,13 +82,13 @@ const MainMenu = ({ setSidebarOpen }) => {
               <span className="sr-only">Open user menu</span>
               <img
                 className="h-8 w-8 rounded-full bg-gray-50"
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                src="https://q-reviews.com/wp-content/uploads/2022/08/Profile_avatar_placeholder_large.png"
                 alt=""
               />
 
               <span className="hidden lg:flex lg:items-center">
                 <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-                  User
+                  {name}
                 </span>
                 <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
               </span>
@@ -92,21 +103,14 @@ const MainMenu = ({ setSidebarOpen }) => {
               leaveTo="transform opacity-0 scale-95"
             >
               <Menu.Items className="absolute right-0 z-10 mt-2.5 w-36 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                {userNavigation.map((item) => (
-                  <Menu.Item key={item.name}>
-                    {({ active }) => (
-                      <a
-                        href={item.href}
-                        className={classNames(
-                          active ? "bg-gray-50" : "",
-                          "block px-3 py-1 text-sm leading-6 text-gray-900"
-                        )}
-                      >
-                        {item.name}
-                      </a>
-                    )}
-                  </Menu.Item>
-                ))}
+                <Menu.Item>
+                  <a
+                    onClick={() => handleLogout()}
+                    className={"cursor-pointer hover:bg-gray-50 block px-3 py-1 text-sm leading-6 text-gray-900"}
+                  >
+                    Dil nga aplikacioni
+                  </a>
+                </Menu.Item>
               </Menu.Items>
             </Transition>
           </Menu>
