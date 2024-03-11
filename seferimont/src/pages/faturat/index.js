@@ -82,8 +82,8 @@ const Faturat = () => {
           }}
           value={searchKey}
           iconBefore={<MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />}
-          className="w-[500px] mt-5"
-          placeholder={"Shkruaj emrin apo numrin e telefonit te klientit ketu"}
+          className="w-[280px] mt-5"
+          placeholder={"Kerko faturen"}
         />
       </div>
       <div className="mt-8 flow-root">
