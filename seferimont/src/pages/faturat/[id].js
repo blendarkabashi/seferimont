@@ -56,7 +56,7 @@ const index = () => {
   useEffect(() => {
     const fetchInvoice = async () => {
       try {
-        const result = await api.get(`http://localhost:9001/invoice/${id}`);
+        const result = await api.get(`/invoice/${id}`);
         setInvoice(result.data);
       } catch (error) {
         console.error("Error fetching invoice:", error);
