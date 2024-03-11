@@ -11,7 +11,7 @@ import { setUser } from "src/store/global";
 const MainMenu = ({ setSidebarOpen }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const userNavigation = [{ name: "Dil nga aplikacioni", href: "#" }];
+  const userNavigation = [{ name: "Dil nga aplikacioni", href: "# " }];
   const user = useSelector((state) => state.global.user);
   const [name, setName] = useState("");
 
