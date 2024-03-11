@@ -52,9 +52,9 @@ const Kryefaqja = () => {
     const fetchInvoices = async () => {
       try {
         const result = await axios.get(`http://localhost:9001/invoice`);
-        setInvoices(result.data);
-        calculateInvoiceTotals(result.data);
-        filterUnpaidInvoices(result.data);
+        setInvoices(result.data.invoices);
+        calculateInvoiceTotals(result.data.invoices);
+        filterUnpaidInvoices(result.data.invoices);
         setLoadingData(false);
       } catch (error) {
         console.error("Error fetching invoices:", error);

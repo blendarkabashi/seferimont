@@ -6,6 +6,7 @@ import AddClient from "src/components/Overlay/add-client";
 import { useRouter } from "next/router";
 import Input from "src/components/Input";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import Pagination from "src/components/Pagination";
 const Klientet = () => {
   const router = useRouter();
   const [clientsOriginal, setClientsOriginal] = useState([]);
@@ -13,6 +14,9 @@ const Klientet = () => {
     // { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
     // More people...
   ]);
+  const [page, setPage] = useState(1);
+  const [offset, setOffset] = useState(20);
+  const [total, setTotal] = useState(10);
 
   const [addClientLoading, setAddClientLoading] = useState(false);
   const [showAddClient, setShowAddClient] = useState(false);
@@ -24,9 +28,10 @@ const Klientet = () => {
 
   const fetchClients = async () => {
     try {
-      const result = await axios.get("http://localhost:9001/client");
-      setClients(result.data);
-      setClientsOriginal(result.data);
+      const result = await axios.get(`http://localhost:9001/client?page=${page}&limit=${offset}`);
+      setClients(result.data.clients);
+      setClientsOriginal(result.data.clients);
+      setTotal(result.data.total);
     } catch (error) {
       console.error("Error fetching clients:", error);
     }
@@ -34,7 +39,7 @@ const Klientet = () => {
 
   useEffect(() => {
     fetchClients();
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     let filteredClients = clientsOriginal.filter(
@@ -136,6 +141,7 @@ const Klientet = () => {
                   ))}
               </tbody>
             </table>
+            {total > offset && <Pagination offset={offset} page={page} setPage={setPage} total={total} />}
           </div>
         </div>
       </div>

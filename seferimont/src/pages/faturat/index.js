@@ -9,6 +9,7 @@ import DeleteInvoice from "src/components/Overlay/delete-invoice";
 import { useSelector } from "react-redux";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import Input from "src/components/Input";
+import Pagination from "src/components/Pagination";
 
 const Faturat = () => {
   const router = useRouter();
@@ -24,20 +25,25 @@ const Faturat = () => {
   const [invoiceToDelete, setInvoiceToDelete] = useState(null);
 
   const [loadingData, setLoadingData] = useState(true);
+  const [page, setPage] = useState(1);
+  const [offset, setOffset] = useState(20);
+  const [total, setTotal] = useState(10);
 
   const fetchInvoices = async () => {
     try {
-      const result = await axios.get(`http://localhost:9001/invoice`);
-      setInvoices(result.data.filter((item) => !item.deleted).reverse());
-      setInvoicesOriginal(result.data.filter((item) => !item.deleted).reverse());
+      const result = await axios.get(`http://localhost:9001/invoice?page=${page}&limit=${offset}`);
+      setInvoices(result.data.invoices.filter((item) => !item.deleted).reverse());
+      setInvoicesOriginal(result.data.invoices.filter((item) => !item.deleted).reverse());
+      setTotal(result.data.total);
     } catch (error) {
       console.error("Error fetching invoices:", error);
     }
     setLoadingData(false);
   };
+
   useEffect(() => {
     fetchInvoices();
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     let filteredInvoices = invoicesOriginal.filter(
@@ -96,12 +102,6 @@ const Faturat = () => {
                     scope="col"
                     className="sticky top-[64px] z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8"
                   >
-                    Nr. rendor
-                  </th>
-                  <th
-                    scope="col"
-                    className="sticky top-[64px] z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8"
-                  >
                     Emri i klientit
                   </th>
                   <th
@@ -152,14 +152,6 @@ const Faturat = () => {
                       className="hover:bg-blue-50 cursor-pointer"
                       onClick={() => router.push(`/faturat/${invoice._id}`)}
                     >
-                      <td
-                        className={classNames(
-                          index !== invoices.length - 1 ? "border-b border-gray-200" : "",
-                          "whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-500 sm:pl-6 lg:pl-8"
-                        )}
-                      >
-                        {index + 1}
-                      </td>
                       <td
                         className={classNames(
                           index !== invoices.length - 1 ? "border-b border-gray-200" : "",
@@ -237,6 +229,7 @@ const Faturat = () => {
                   ))}
               </tbody>
             </table>
+            {total > offset && <Pagination offset={offset} page={page} setPage={setPage} total={total} />}
           </div>
         </div>
       </div>

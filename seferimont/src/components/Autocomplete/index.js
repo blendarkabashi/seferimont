@@ -23,7 +23,7 @@ export default function Autocomplete({ required, selectedClient, setSelectedClie
   };
 
   const getClients = async () => {
-    axios.get("http://localhost:9001/client").then((results) => setClients(results.data));
+    axios.get("http://localhost:9001/client").then((results) => setClients(results.data.clients));
   };
 
   useEffect(() => {
