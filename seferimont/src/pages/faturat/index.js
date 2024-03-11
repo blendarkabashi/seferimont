@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import Input from "src/components/Input";
 import Pagination from "src/components/Pagination";
+import api from "src/api/axios";
 
 const Faturat = () => {
   const router = useRouter();
@@ -31,7 +32,7 @@ const Faturat = () => {
 
   const fetchInvoices = async () => {
     try {
-      const result = await axios.get(`http://localhost:9001/invoice?page=${page}&limit=${offset}`);
+      const result = await api.get(`/invoice?page=${page}&limit=${offset}`);
       setInvoices(result.data.invoices.filter((item) => !item.deleted).reverse());
       setInvoicesOriginal(result.data.invoices.filter((item) => !item.deleted).reverse());
       setTotal(result.data.total);
@@ -57,7 +58,7 @@ const Faturat = () => {
 
   const handleDeleteInvoice = async () => {
     setDeleting(true);
-    await axios.delete(`http://localhost:9001/invoice/${invoiceToDelete}`);
+    await api.delete(`/invoice/${invoiceToDelete}`);
     setDeleting(false);
     setShowDeleteInvoiceDialog(false);
     fetchInvoices();

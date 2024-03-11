@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "src/store/global";
 import Button from "src/components/Button";
 import toast from "react-hot-toast";
+import api from "src/api/axios";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ export default function Home() {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await axios.post("http://localhost:9001/user/login", {
+      const response = await api.post("/user/login", {
         email: identifier,
         password: password,
       });
@@ -32,9 +33,6 @@ export default function Home() {
       let { token, user } = response.data;
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("token", token);
-
-      // axios.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
-      console.log(axios.defaults.headers);
       toast.success("Jeni kycur me sukses!");
       router.push("/kryefaqja");
     } catch (error) {

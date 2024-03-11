@@ -10,6 +10,7 @@ import withAuth from "src/components/withAuth";
 import Loader from "src/components/Loader";
 import Input from "src/components/Input";
 import { useSelector } from "react-redux";
+import api from "src/api/axios";
 
 const Kryefaqja = () => {
   const user = useSelector((state) => state.global.user);
@@ -51,7 +52,7 @@ const Kryefaqja = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const result = await axios.get(`http://localhost:9001/invoice`);
+        const result = await api.get(`/invoice`);
         setInvoices(result.data.invoices);
         calculateInvoiceTotals(result.data.invoices);
         filterUnpaidInvoices(result.data.invoices);

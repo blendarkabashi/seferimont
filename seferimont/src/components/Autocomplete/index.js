@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AutoComplete } from "primereact/autocomplete";
 import axios from "axios";
+import api from "src/api/axios";
 
 export default function Autocomplete({ required, selectedClient, setSelectedClient, onSelect }) {
   const [clients, setClients] = useState([]);
@@ -23,7 +24,7 @@ export default function Autocomplete({ required, selectedClient, setSelectedClie
   };
 
   const getClients = async () => {
-    axios.get("http://localhost:9001/client").then((results) => setClients(results.data.clients));
+    api.get("/client").then((results) => setClients(results.data.clients));
   };
 
   useEffect(() => {

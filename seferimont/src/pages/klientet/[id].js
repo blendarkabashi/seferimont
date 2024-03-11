@@ -4,6 +4,7 @@ import axios from "axios";
 import { formatCurrency, formatDateString } from "src/global/functions";
 import { classNames } from "primereact/utils";
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
+import api from "src/api/axios";
 const index = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -15,7 +16,7 @@ const index = () => {
   useEffect(() => {
     const fetchClient = async () => {
       try {
-        const result = await axios.get(`http://localhost:9001/client/${id}`);
+        const result = await api.get(`/client/${id}`);
         setClient(result.data);
         calculateInvoiceTotals(result.data.invoices);
       } catch (error) {

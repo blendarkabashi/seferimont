@@ -6,6 +6,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import withAuth from "src/components/withAuth";
 import PrintableInvoice from "src/components/PrintableInvoice";
+import api from "src/api/axios";
 const index = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -55,7 +56,7 @@ const index = () => {
   useEffect(() => {
     const fetchInvoice = async () => {
       try {
-        const result = await axios.get(`http://localhost:9001/invoice/${id}`);
+        const result = await api.get(`http://localhost:9001/invoice/${id}`);
         setInvoice(result.data);
       } catch (error) {
         console.error("Error fetching invoice:", error);

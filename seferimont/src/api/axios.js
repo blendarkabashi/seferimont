@@ -1,9 +1,12 @@
 import axios from "axios";
 
+const api = axios.create({
+  baseURL: "https://seferimont-backend.vercel.app/",
+});
+
 export const initializeAxiosInterceptor = () => {
-  axios.interceptors.request.use(
+  api.interceptors.request.use(
     function (config) {
-      console.log(localStorage.getItem("token"));
       const token = localStorage.getItem("token");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -15,3 +18,5 @@ export const initializeAxiosInterceptor = () => {
     }
   );
 };
+
+export default api;

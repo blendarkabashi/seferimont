@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import Input from "src/components/Input";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import Pagination from "src/components/Pagination";
+import api from "src/api/axios";
 const Klientet = () => {
   const router = useRouter();
   const [clientsOriginal, setClientsOriginal] = useState([]);
@@ -28,7 +29,7 @@ const Klientet = () => {
 
   const fetchClients = async () => {
     try {
-      const result = await axios.get(`http://localhost:9001/client?page=${page}&limit=${offset}`);
+      const result = await api.get(`/client?page=${page}&limit=${offset}`);
       setClients(result.data.clients);
       setClientsOriginal(result.data.clients);
       setTotal(result.data.total);
@@ -52,7 +53,7 @@ const Klientet = () => {
   const addClient = async (client) => {
     try {
       setAddClientLoading(true);
-      await axios.post("http://localhost:9001/client", {
+      await api.post("/client", {
         fullname: client.fullname,
         phone_number: client.phone_number,
         email: client.email,

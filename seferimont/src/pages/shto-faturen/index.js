@@ -10,6 +10,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import withAuth from "src/components/withAuth";
+import api from "src/api/axios";
 
 // import { colourOptions } from '../data';
 
@@ -52,7 +53,7 @@ const index = () => {
   }, [invoiceTotal]);
 
   const getServices = async () => {
-    axios.get("http://localhost:9001/product").then((result) => {
+    api.get("/product").then((result) => {
       const formattedServices = result.data.map((item) => ({
         label: item.label,
         value: item._id,
@@ -165,7 +166,7 @@ const index = () => {
   };
   const addProductToAPI = async (productData) => {
     try {
-      const response = await axios.post("http://localhost:9001/product", {
+      const response = await api.post("/product", {
         label: productData.label,
       });
       console.log("Product added:", response.data);
@@ -176,7 +177,7 @@ const index = () => {
 
   const getClient = async (clientId) => {
     try {
-      const response = axios.get(`http://localhost:9001/client/${clientId}`);
+      const response = api.get(`/client/${clientId}`);
       return response;
     } catch (error) {
       console.error("Error getting client:", error);
@@ -185,7 +186,7 @@ const index = () => {
 
   const updateClient = (clientId, invoices) => {
     try {
-      const response = axios.put(`http://localhost:9001/client/${clientId}`, {
+      const response = api.put(`/client/${clientId}`, {
         invoices: invoices,
       });
     } catch (error) {
@@ -195,7 +196,7 @@ const index = () => {
 
   const addClient = async (clientName, phone) => {
     try {
-      const response = await axios.post("http://localhost:9001/client", {
+      const response = await api.post("/client", {
         fullname: clientName,
         phone_number: phone,
       });
@@ -207,7 +208,7 @@ const index = () => {
 
   const addInvoice = async (data) => {
     try {
-      const response = await axios.post("http://localhost:9001/invoice", data);
+      const response = await api.post("/invoice", data);
       setLoadingInvoice(false);
       router.push("/faturat");
       toast.success(`Fatura u shtua me sukses!`);
