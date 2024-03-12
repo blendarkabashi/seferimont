@@ -168,7 +168,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
                 <ul role="list" className="-mx-2 space-y-1">
                   {navigation.map((item) => (
                     <li key={item.name}>
-                      <a
+                      <Link
                         href={item.href}
                         className={classNames(
                           router.asPath == item.href || router.asPath.includes(item.href)
@@ -179,7 +179,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
                       >
                         <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
                         {item.name}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
