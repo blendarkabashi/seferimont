@@ -22,14 +22,22 @@ const Klientet = () => {
   const [addClientLoading, setAddClientLoading] = useState(false);
   const [showAddClient, setShowAddClient] = useState(false);
   const [searchKey, setSearchKey] = useState("");
+  const [searchValue, setSearchValue] = useState("");
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
 
   const fetchClients = async () => {
+    let apiUrl = `/client?page=${page}&limit=${offset}`;
+    if (searchKey && searchValue) {
+      const filters = { [searchKey]: searchValue };
+      apiUrl = `/client?page=${page}&limit=${offset}&filters=${encodeURIComponent(
+        JSON.stringify(filters)
+      )}`;
+    }
     try {
-      const result = await api.get(`/client?page=${page}&limit=${offset}`);
+      const result = await api.get(apiUrl);
       setClients(result.data.clients);
       setClientsOriginal(result.data.clients);
       setTotal(result.data.total);
@@ -43,12 +51,17 @@ const Klientet = () => {
   }, [page]);
 
   useEffect(() => {
-    let filteredClients = clientsOriginal.filter(
-      (client) =>
-        client.fullname.toLowerCase().includes(searchKey.toLowerCase()) || client.phone_number.includes(searchKey)
-    );
-    setClients(filteredClients);
-  }, [searchKey]);
+    if (searchKey && searchValue) fetchClients();
+  }, [searchKey, searchValue]);
+
+  //useEffect(() => {
+  //  let filteredClients = clientsOriginal.filter(
+  //    (client) =>
+  //      client.fullname.toLowerCase().includes(searchKey.toLowerCase()) ||
+  //      client.phone_number.includes(searchKey)
+  //  );
+  //  setClients(filteredClients);
+  //}, [searchKey]);
 
   const addClient = async (client) => {
     try {
@@ -69,8 +82,12 @@ const Klientet = () => {
     <div className="px-4 sm:px-6 lg:px-8 mt-6">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-900">Klientet</h1>
-          <p className="mt-2 text-sm text-gray-700">Lista e te gjithe klienteve qe jane te regjistruar ne sistem.</p>
+          <h1 className="text-base font-semibold leading-6 text-gray-900">
+            Klientet
+          </h1>
+          <p className="mt-2 text-sm text-gray-700">
+            Lista e te gjithe klienteve qe jane te regjistruar ne sistem.
+          </p>
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <button
@@ -82,14 +99,30 @@ const Klientet = () => {
           </button>
         </div>
       </div>
-      <div>
+      <div className="flex flex-row justify-between mt-5">
         <Input
+          label="Key"
           onChange={(event) => {
             setSearchKey(event.target.value);
           }}
           value={searchKey}
+          className="w-[200px] mt-2"
+          type="dropdown"
+          placeholder={"Kerko klientin"}
+          options={[
+            { key: "phone_number", value: "Phone number" },
+            { key: "email", value: "Email" },
+            { key: "fullname", value: "Full Name" },
+          ]}
+        />
+        <Input
+          label="Value"
+          onChange={(event) => {
+            setSearchValue(event.target.value);
+          }}
+          value={searchValue}
           iconBefore={<MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />}
-          className="w-[280px] mt-5"
+          className="w-[280px]"
           placeholder={"Kerko klientin"}
         />
       </div>
@@ -124,7 +157,9 @@ const Klientet = () => {
                     >
                       <td
                         className={classNames(
-                          index !== clients.length - 1 ? "border-b border-gray-200" : "",
+                          index !== clients.length - 1
+                            ? "border-b border-gray-200"
+                            : "",
                           "whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
                         )}
                       >
@@ -132,7 +167,9 @@ const Klientet = () => {
                       </td>
                       <td
                         className={classNames(
-                          index !== clients.length - 1 ? "border-b border-gray-200" : "",
+                          index !== clients.length - 1
+                            ? "border-b border-gray-200"
+                            : "",
                           "whitespace-nowrap hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
                         )}
                       >
@@ -142,12 +179,24 @@ const Klientet = () => {
                   ))}
               </tbody>
             </table>
-            {total > offset && <Pagination offset={offset} page={page} setPage={setPage} total={total} />}
+            {total > offset && (
+              <Pagination
+                offset={offset}
+                page={page}
+                setPage={setPage}
+                total={total}
+              />
+            )}
           </div>
         </div>
       </div>
       {showAddClient && (
-        <AddClient loading={addClientLoading} onSubmit={addClient} open={showAddClient} setOpen={setShowAddClient} />
+        <AddClient
+          loading={addClientLoading}
+          onSubmit={addClient}
+          open={showAddClient}
+          setOpen={setShowAddClient}
+        />
       )}
     </div>
   );
