@@ -16,6 +16,7 @@ const Faturat = () => {
   const router = useRouter();
   const [invoicesOriginal, setInvoicesOriginal] = useState([]);
   const [searchKey, setSearchKey] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   const [invoices, setInvoices] = useState([
     // { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
     // More people...
@@ -31,30 +32,39 @@ const Faturat = () => {
   const [total, setTotal] = useState(10);
 
   const fetchInvoices = async () => {
+    let apiUrl = `/invoice?page=${page}&limit=${offset}`;
+    if (searchKey && searchValue) {
+      const filters = { [searchKey]: searchValue };
+      apiUrl = `/invoice?page=${page}&limit=${offset}&filters=${encodeURIComponent(
+        JSON.stringify(filters)
+      )}`;
+    }
     try {
-      const result = await api.get(`/invoice?page=${page}&limit=${offset}`);
-      setInvoices(result.data.invoices.filter((item) => !item.deleted).reverse());
-      setInvoicesOriginal(result.data.invoices.filter((item) => !item.deleted).reverse());
+      const result = await api.get(apiUrl);
+      setInvoices(result.data.invoices);
+      setInvoicesOriginal(result.data.invoices);
       setTotal(result.data.total);
     } catch (error) {
       console.error("Error fetching invoices:", error);
     }
-    setLoadingData(false);
   };
 
   useEffect(() => {
-    fetchInvoices();
-  }, [page]);
+    if (searchValue === "") fetchInvoices();
+  }, [page, searchValue]);
 
   useEffect(() => {
-    let filteredInvoices = invoicesOriginal.filter(
-      (invoice) =>
-        invoice.client.fullname.toLowerCase().includes(searchKey.toLowerCase()) ||
-        invoice.client.phone_number.toLowerCase().includes(searchKey.toLowerCase()) ||
-        invoice.paid.toString().includes(searchKey.toString())
-    );
-    setInvoices(filteredInvoices);
-  }, [searchKey]);
+    let timer;
+    if (searchKey && searchValue) {
+      timer = setTimeout(() => {
+        fetchInvoices();
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchKey, searchValue]);
 
   const handleDeleteInvoice = async () => {
     setDeleting(true);
@@ -70,8 +80,12 @@ const Faturat = () => {
     <div className="px-4 sm:px-6 lg:px-8 mt-6">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-900">Faturat</h1>
-          <p className="mt-2 text-sm text-gray-700">Lista e faturave te regjistruara ne sistem.</p>
+          <h1 className="text-base font-semibold leading-6 text-gray-900">
+            Faturat
+          </h1>
+          <p className="mt-2 text-sm text-gray-700">
+            Lista e faturave te regjistruara ne sistem.
+          </p>
         </div>
         <div className="block sm:hidden mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <button
@@ -82,15 +96,33 @@ const Faturat = () => {
           </button>
         </div>
       </div>
-      <div>
+      <div className="flex flex-row justify-between mt-5">
         <Input
+          label="Key"
           onChange={(event) => {
             setSearchKey(event.target.value);
           }}
           value={searchKey}
+          className="w-[220px] mt-2"
+          type="dropdown"
+          placeholder={"Kerko klientin"}
+          options={[
+            { key: "total", value: "Total" },
+            { key: "unpaid", value: "Unpaid" },
+            { key: "paid", value: "Paid" },
+            { key: "due", value: "Due" },
+            { key: "plates", value: "Plates" },
+          ]}
+        />
+        <Input
+          label="Value"
+          onChange={(event) => {
+            setSearchValue(event.target.value);
+          }}
+          value={searchValue}
           iconBefore={<MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />}
-          className="w-[280px] mt-5"
-          placeholder={"Kerko faturen"}
+          className="w-[280px]"
+          placeholder={"Kerko klientin"}
         />
       </div>
       <div className="mt-8 flow-root">
@@ -155,7 +187,9 @@ const Faturat = () => {
                     >
                       <td
                         className={classNames(
-                          index !== invoices.length - 1 ? "border-b border-gray-200" : "",
+                          index !== invoices.length - 1
+                            ? "border-b border-gray-200"
+                            : "",
                           "whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
                         )}
                       >
@@ -163,7 +197,9 @@ const Faturat = () => {
                       </td>
                       <td
                         className={classNames(
-                          index !== invoices.length - 1 ? "border-b border-gray-200" : "",
+                          index !== invoices.length - 1
+                            ? "border-b border-gray-200"
+                            : "",
                           "whitespace-nowrap hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
                         )}
                       >
@@ -171,7 +207,9 @@ const Faturat = () => {
                       </td>
                       <td
                         className={classNames(
-                          index !== invoices.length - 1 ? "border-b border-gray-200" : "",
+                          index !== invoices.length - 1
+                            ? "border-b border-gray-200"
+                            : "",
                           "whitespace-nowrap hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                         )}
                       >
@@ -179,7 +217,9 @@ const Faturat = () => {
                       </td>
                       <td
                         className={classNames(
-                          index !== invoices.length - 1 ? "border-b border-gray-200" : "",
+                          index !== invoices.length - 1
+                            ? "border-b border-gray-200"
+                            : "",
                           "whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                         )}
                       >
@@ -187,9 +227,13 @@ const Faturat = () => {
                       </td>
                       <td
                         className={classNames(
-                          index !== invoices.length - 1 ? "border-b border-gray-200" : "",
+                          index !== invoices.length - 1
+                            ? "border-b border-gray-200"
+                            : "",
                           `whitespace-nowrap px-3 py-4 text-sm ${
-                            invoice.unpaid > 0 ? "text-red-500" : "text-green-500"
+                            invoice.unpaid > 0
+                              ? "text-red-500"
+                              : "text-green-500"
                           }`
                         )}
                       >
@@ -197,7 +241,9 @@ const Faturat = () => {
                       </td>
                       <td
                         className={classNames(
-                          index !== invoices.length - 1 ? "border-b border-gray-200" : "",
+                          index !== invoices.length - 1
+                            ? "border-b border-gray-200"
+                            : "",
                           "whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                         )}
                       >
@@ -205,7 +251,9 @@ const Faturat = () => {
                       </td>
                       <td
                         className={classNames(
-                          index !== invoices.length - 1 ? "border-b border-gray-200" : "",
+                          index !== invoices.length - 1
+                            ? "border-b border-gray-200"
+                            : "",
                           "relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-8 lg:pr-8"
                         )}
                       >
@@ -223,14 +271,22 @@ const Faturat = () => {
                           }}
                           className="text-red-600 hover:text-red-500 cursor-pointer"
                         >
-                          Fshij Faturen<span className="sr-only">, {invoice.name}</span>
+                          Fshij Faturen
+                          <span className="sr-only">, {invoice.name}</span>
                         </a>
                       </td>
                     </tr>
                   ))}
               </tbody>
             </table>
-            {total > offset && <Pagination offset={offset} page={page} setPage={setPage} total={total} />}
+            {total > offset && (
+              <Pagination
+                offset={offset}
+                page={page}
+                setPage={setPage}
+                total={total}
+              />
+            )}
           </div>
         </div>
       </div>

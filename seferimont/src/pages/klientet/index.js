@@ -47,11 +47,20 @@ const Klientet = () => {
   };
 
   useEffect(() => {
-    fetchClients();
-  }, [page]);
+    if (searchValue === "") fetchClients();
+  }, [page, searchValue]);
 
   useEffect(() => {
-    if (searchKey && searchValue) fetchClients();
+    let timer;
+    if (searchKey && searchValue) {
+      timer = setTimeout(() => {
+        fetchClients();
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [searchKey, searchValue]);
 
   //useEffect(() => {
@@ -124,6 +133,7 @@ const Klientet = () => {
           iconBefore={<MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />}
           className="w-[280px]"
           placeholder={"Kerko klientin"}
+          disabled={!searchKey}
         />
       </div>
       <div className="mt-8 flow-root">
