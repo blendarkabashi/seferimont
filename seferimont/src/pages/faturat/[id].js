@@ -104,7 +104,7 @@ const index = () => {
                 </svg>
                 Shkarko PDF
               </a>
-              <a
+              {/* <a
                 class=" cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                 onClick={printInvoice}
               >
@@ -125,7 +125,7 @@ const index = () => {
                   <rect width="12" height="8" x="6" y="14" />
                 </svg>
                 Printo
-              </a>
+              </a> */}
             </div>
           </div>
 

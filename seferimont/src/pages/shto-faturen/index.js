@@ -20,6 +20,7 @@ const index = () => {
   const [client, setClient] = useState("");
 
   const [loadingInvoice, setLoadingInvoice] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [plates, setPlates] = useState("");
   const today = new Date();
@@ -51,6 +52,15 @@ const index = () => {
   useEffect(() => {
     setPaidAmount(invoiceTotal);
   }, [invoiceTotal]);
+
+  useEffect(() => {
+    if (phoneNumber && client && date) {
+      const areAllProductsValid = products.every((product) => product.quantity && product.price && product.product);
+      setIsFormValid(areAllProductsValid);
+    } else {
+      setIsFormValid(false);
+    }
+  }, [client, phoneNumber, date, products]);
 
   const getServices = async () => {
     api.get("/product").then((result) => {
@@ -455,7 +465,7 @@ const index = () => {
           </div>
           <div className=" mt-16 flex justify-center">
             <div className="sm:w-[300px] w-full">
-              <Button loading={loadingInvoice} type={"submit"} success label="Ruaj Faturen" />
+              <Button disabled={!isFormValid} loading={loadingInvoice} type={"submit"} success label="Ruaj Faturen" />
             </div>
           </div>
         </form>
