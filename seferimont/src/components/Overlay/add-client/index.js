@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Overlay from "../index";
 import Input from "src/components/Input";
 import ExclamationTriangleIcon from "@heroicons/react/20/solid/ExclamationTriangleIcon";
@@ -9,6 +9,16 @@ const AddClient = ({ onSubmit, open, setOpen, loading }) => {
   const [fullName, setFullName] = useState();
   const [email, setEmail] = useState();
   const [phoneNumber, setPhoneNumber] = useState();
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  useEffect(() => {
+    if (fullName && phoneNumber) {
+      setIsFormValid(true);
+    } else {
+      setIsFormValid(false);
+    }
+  }, [phoneNumber, fullName]);
+
   return (
     <Overlay open={open} setOpen={setOpen}>
       <div className="">
@@ -48,6 +58,7 @@ const AddClient = ({ onSubmit, open, setOpen, loading }) => {
         <Button
           className="inline-flex w-full sm:w-auto sm:ml-3"
           loading={loading}
+          disabled={!isFormValid}
           success
           onClick={() => onSubmit({ fullname: fullName, email: email, phone_number: phoneNumber })}
         >

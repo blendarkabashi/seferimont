@@ -35,9 +35,7 @@ const Faturat = () => {
     let apiUrl = `/invoice?page=${page}&limit=${offset}`;
     if (searchKey && searchValue) {
       const filters = { [searchKey]: searchValue };
-      apiUrl = `/invoice?page=${page}&limit=${offset}&filters=${encodeURIComponent(
-        JSON.stringify(filters)
-      )}`;
+      apiUrl = `/invoice?page=${page}&limit=${offset}&filters=${encodeURIComponent(JSON.stringify(filters))}`;
     }
     try {
       const result = await api.get(apiUrl);
@@ -80,12 +78,8 @@ const Faturat = () => {
     <div className="px-4 sm:px-6 lg:px-8 mt-6">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-900">
-            Faturat
-          </h1>
-          <p className="mt-2 text-sm text-gray-700">
-            Lista e faturave te regjistruara ne sistem.
-          </p>
+          <h1 className="text-base font-semibold leading-6 text-gray-900">Faturat</h1>
+          <p className="mt-2 text-sm text-gray-700">Lista e faturave te regjistruara ne sistem.</p>
         </div>
         <div className="block sm:hidden mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <button
@@ -96,7 +90,7 @@ const Faturat = () => {
           </button>
         </div>
       </div>
-      <div className="flex flex-row justify-between mt-5">
+      {/* <div className="flex flex-row justify-between mt-5">
         <Input
           label="Key"
           onChange={(event) => {
@@ -124,7 +118,7 @@ const Faturat = () => {
           className="w-[280px]"
           placeholder={"Kerko klientin"}
         />
-      </div>
+      </div> */}
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle">
@@ -187,9 +181,7 @@ const Faturat = () => {
                     >
                       <td
                         className={classNames(
-                          index !== invoices.length - 1
-                            ? "border-b border-gray-200"
-                            : "",
+                          index !== invoices.length - 1 ? "border-b border-gray-200" : "",
                           "whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
                         )}
                       >
@@ -197,9 +189,7 @@ const Faturat = () => {
                       </td>
                       <td
                         className={classNames(
-                          index !== invoices.length - 1
-                            ? "border-b border-gray-200"
-                            : "",
+                          index !== invoices.length - 1 ? "border-b border-gray-200" : "",
                           "whitespace-nowrap hidden px-3 py-4 text-sm text-gray-500 sm:table-cell"
                         )}
                       >
@@ -207,9 +197,7 @@ const Faturat = () => {
                       </td>
                       <td
                         className={classNames(
-                          index !== invoices.length - 1
-                            ? "border-b border-gray-200"
-                            : "",
+                          index !== invoices.length - 1 ? "border-b border-gray-200" : "",
                           "whitespace-nowrap hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
                         )}
                       >
@@ -217,9 +205,7 @@ const Faturat = () => {
                       </td>
                       <td
                         className={classNames(
-                          index !== invoices.length - 1
-                            ? "border-b border-gray-200"
-                            : "",
+                          index !== invoices.length - 1 ? "border-b border-gray-200" : "",
                           "whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                         )}
                       >
@@ -227,13 +213,9 @@ const Faturat = () => {
                       </td>
                       <td
                         className={classNames(
-                          index !== invoices.length - 1
-                            ? "border-b border-gray-200"
-                            : "",
+                          index !== invoices.length - 1 ? "border-b border-gray-200" : "",
                           `whitespace-nowrap px-3 py-4 text-sm ${
-                            invoice.unpaid > 0
-                              ? "text-red-500"
-                              : "text-green-500"
+                            invoice.unpaid > 0 ? "text-red-500" : "text-green-500"
                           }`
                         )}
                       >
@@ -241,9 +223,7 @@ const Faturat = () => {
                       </td>
                       <td
                         className={classNames(
-                          index !== invoices.length - 1
-                            ? "border-b border-gray-200"
-                            : "",
+                          index !== invoices.length - 1 ? "border-b border-gray-200" : "",
                           "whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                         )}
                       >
@@ -251,9 +231,7 @@ const Faturat = () => {
                       </td>
                       <td
                         className={classNames(
-                          index !== invoices.length - 1
-                            ? "border-b border-gray-200"
-                            : "",
+                          index !== invoices.length - 1 ? "border-b border-gray-200" : "",
                           "relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-8 lg:pr-8"
                         )}
                       >
@@ -279,14 +257,7 @@ const Faturat = () => {
                   ))}
               </tbody>
             </table>
-            {total > offset && (
-              <Pagination
-                offset={offset}
-                page={page}
-                setPage={setPage}
-                total={total}
-              />
-            )}
+            {total > offset && <Pagination offset={offset} page={page} setPage={setPage} total={total} />}
           </div>
         </div>
       </div>
