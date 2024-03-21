@@ -82,6 +82,7 @@ const Faturat = () => {
         <div className="block sm:hidden mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <button
             type="button"
+            onClick={() => router.push("/shto-faturen")}
             className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             Shto Faturen
@@ -90,7 +91,7 @@ const Faturat = () => {
       </div>
       <div className="flex flex-row justify-between mt-5">
         <Input
-          label="Shkruaj shumen totale apo shumen e pa paguar te fatures qe po kerkoni"
+          label="Shkruaj shumen totale apo shumen e pa paguar te fatures qe po kerkoni:"
           onChange={(event) => {
             setSearchValue(event.target.value);
           }}
