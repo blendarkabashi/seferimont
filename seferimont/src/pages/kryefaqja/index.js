@@ -32,7 +32,7 @@ const Kryefaqja = () => {
 
     setStats([
       { name: "Totali", value: formatCurrency(invoiceTotal) },
-      { name: "Fatura te papaguara", value: formatCurrency(invoiceUnpaid) },
+      { name: "Fatura te pa paguara", value: formatCurrency(invoiceUnpaid) },
       { name: "Fatura te paguara", value: formatCurrency(invoicePaid) },
     ]);
   };
