@@ -15,8 +15,6 @@ import api from "src/api/axios";
 const Faturat = () => {
   const router = useRouter();
   const [invoicesOriginal, setInvoicesOriginal] = useState([]);
-  const [searchKey, setSearchKey] = useState("");
-  const [searchValue, setSearchValue] = useState("");
   const [invoices, setInvoices] = useState([
     // { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
     // More people...
@@ -30,14 +28,17 @@ const Faturat = () => {
   const [page, setPage] = useState(1);
   const [offset, setOffset] = useState(20);
   const [total, setTotal] = useState(10);
+  const [searchValue, setSearchValue] = useState("");
+  const [debouncedSearchValue, setDebouncedSearchValue] = useState(searchValue);
 
   const fetchInvoices = async () => {
-    let apiUrl = `/invoice?page=${page}&limit=${offset}`;
-    if (searchKey && searchValue) {
-      const filters = { [searchKey]: searchValue };
-      apiUrl = `/invoice?page=${page}&limit=${offset}&filters=${encodeURIComponent(JSON.stringify(filters))}`;
-    }
     try {
+      let apiUrl = "";
+      if (debouncedSearchValue.length) {
+        apiUrl = `/invoice?page=${page}&limit=${offset}&searchValue=${debouncedSearchValue}`;
+      } else {
+        apiUrl = `/invoice?page=${page}&limit=${offset}`;
+      }
       const result = await api.get(apiUrl);
       setInvoices(result.data.invoices);
       setInvoicesOriginal(result.data.invoices);
@@ -48,21 +49,18 @@ const Faturat = () => {
   };
 
   useEffect(() => {
-    if (searchValue === "") fetchInvoices();
-  }, [page, searchValue]);
-
-  useEffect(() => {
-    let timer;
-    if (searchKey && searchValue) {
-      timer = setTimeout(() => {
-        fetchInvoices();
-      }, 2000);
-    }
+    const handler = setTimeout(() => {
+      setDebouncedSearchValue(searchValue);
+    }, 500);
 
     return () => {
-      clearTimeout(timer);
+      clearTimeout(handler);
     };
-  }, [searchKey, searchValue]);
+  }, [searchValue]);
+
+  useEffect(() => {
+    fetchInvoices();
+  }, [page, debouncedSearchValue]);
 
   const handleDeleteInvoice = async () => {
     setDeleting(true);
@@ -90,35 +88,18 @@ const Faturat = () => {
           </button>
         </div>
       </div>
-      {/* <div className="flex flex-row justify-between mt-5">
+      <div className="flex flex-row justify-between mt-5">
         <Input
-          label="Key"
-          onChange={(event) => {
-            setSearchKey(event.target.value);
-          }}
-          value={searchKey}
-          className="w-[220px] mt-2"
-          type="dropdown"
-          placeholder={"Kerko klientin"}
-          options={[
-            { key: "total", value: "Total" },
-            { key: "unpaid", value: "Unpaid" },
-            { key: "paid", value: "Paid" },
-            { key: "due", value: "Due" },
-            { key: "plates", value: "Plates" },
-          ]}
-        />
-        <Input
-          label="Value"
+          label="Shkruaj shumen totale apo shumen e pa paguar te fatures qe po kerkoni"
           onChange={(event) => {
             setSearchValue(event.target.value);
           }}
           value={searchValue}
           iconBefore={<MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />}
           className="w-[280px]"
-          placeholder={"Kerko klientin"}
+          placeholder={"Kerko faturen"}
         />
-      </div> */}
+      </div>
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle">

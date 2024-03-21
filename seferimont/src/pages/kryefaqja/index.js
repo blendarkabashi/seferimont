@@ -11,8 +11,10 @@ import Loader from "src/components/Loader";
 import Input from "src/components/Input";
 import { useSelector } from "react-redux";
 import api from "src/api/axios";
+import { useRouter } from "next/router";
 
 const Kryefaqja = () => {
+  const router = useRouter();
   const user = useSelector((state) => state.global.user);
   const [stats, setStats] = useState();
   const [dueInvoices, setDueInvoices] = useState([]);

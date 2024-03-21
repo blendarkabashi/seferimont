@@ -30,7 +30,7 @@ const DeleteInvoice = ({ onSubmit, open, setOpen, loading }) => {
         >
           Fshij Faturen
         </button> */}
-        <Button inline className="sm:ml-3" loading={loading} secondary onClick={onSubmit}>
+        <Button inline className="sm:ml-3 w-full sm:w-auto" loading={loading} secondary onClick={onSubmit}>
           Fshij Faturen
         </Button>
         <button
