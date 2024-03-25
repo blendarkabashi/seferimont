@@ -26,6 +26,12 @@ const Faturat = () => {
 
   const [loadingData, setLoadingData] = useState(true);
   const [page, setPage] = useState(1);
+  const today = new Date();
+  const formattedToday = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, "0")}-${today
+    .getDate()
+    .toString()
+    .padStart(2, "0")}`;
+  const [searchDate, setSearchDate] = useState(null);
   const [offset, setOffset] = useState(20);
   const [total, setTotal] = useState(10);
   const [searchValue, setSearchValue] = useState("");
@@ -34,11 +40,9 @@ const Faturat = () => {
   const fetchInvoices = async () => {
     try {
       let apiUrl = "";
-      if (debouncedSearchValue.length) {
-        apiUrl = `/invoice?page=${page}&limit=${offset}&searchValue=${debouncedSearchValue}`;
-      } else {
-        apiUrl = `/invoice?page=${page}&limit=${offset}`;
-      }
+      apiUrl = `/invoice?page=${page}&limit=${offset}${
+        debouncedSearchValue.length ? `&searchValue=${debouncedSearchValue}` : ""
+      }${searchDate ? `&searchValue=${searchDate}` : ""}`;
       const result = await api.get(apiUrl);
       setInvoices(result.data.invoices);
       setInvoicesOriginal(result.data.invoices);
@@ -57,6 +61,10 @@ const Faturat = () => {
       clearTimeout(handler);
     };
   }, [searchValue]);
+
+  useEffect(() => {
+    fetchInvoices();
+  }, [searchDate]);
 
   useEffect(() => {
     fetchInvoices();
@@ -95,10 +103,19 @@ const Faturat = () => {
           onChange={(event) => {
             setSearchValue(event.target.value);
           }}
+          readonly={searchDate}
           value={searchValue}
           iconBefore={<MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />}
           className="w-[280px]"
           placeholder={"Kerko faturen"}
+        />
+        <Input
+          required
+          label="Shkruaj daten per te kerkuar faturat e asaj dite"
+          onChange={(event) => setSearchDate(event.target.value)}
+          value={searchDate}
+          type="date"
+          placeholder={"10 Jan 2023"}
         />
       </div>
       <div className="mt-8 flow-root">
@@ -127,9 +144,21 @@ const Faturat = () => {
                   </th>
                   <th
                     scope="col"
+                    className="sticky top-[64px] z-10 hidden border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter lg:table-cell"
+                  >
+                    Nr. i shasise
+                  </th>
+                  <th
+                    scope="col"
+                    className="sticky top-[64px] z-10 hidden border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter lg:table-cell"
+                  >
+                    Modeli
+                  </th>
+                  <th
+                    scope="col"
                     className="sticky top-[64px] z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter"
                   >
-                    Data e fundit per pagese
+                    Data e fatures
                   </th>
                   <th
                     scope="col"
@@ -188,10 +217,26 @@ const Faturat = () => {
                       <td
                         className={classNames(
                           index !== invoices.length - 1 ? "border-b border-gray-200" : "",
+                          "whitespace-nowrap hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                        )}
+                      >
+                        {invoice.vin ? invoice.vin : "-"}
+                      </td>
+                      <td
+                        className={classNames(
+                          index !== invoices.length - 1 ? "border-b border-gray-200" : "",
+                          "whitespace-nowrap hidden px-3 py-4 text-sm text-gray-500 lg:table-cell"
+                        )}
+                      >
+                        {invoice.car_type ? invoice.car_type : "-"}
+                      </td>
+                      <td
+                        className={classNames(
+                          index !== invoices.length - 1 ? "border-b border-gray-200" : "",
                           "whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                         )}
                       >
-                        {formatDateString(invoice.due)}
+                        {formatDateString(invoice.createdAt)}
                       </td>
                       <td
                         className={classNames(
@@ -217,13 +262,13 @@ const Faturat = () => {
                           "relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-8 lg:pr-8"
                         )}
                       >
-                        {/* <a
-                        onClick={() => router.push(`/faturat/${invoice.id}`)}
-                        className="text-indigo-600 hover:text-indigo-500 cursor-pointer"
-                      >
-                        Shiko detajet<span className="sr-only">, {invoice.attributes.name}</span>
-                      </a> */}
                         <a
+                          onClick={() => router.push(`/faturat/ndrysho/${invoice._id}`)}
+                          className="text-[#111827] hover:text-[#253459] cursor-pointer"
+                        >
+                          Modifiko Faturen<span className="sr-only">, {invoice._id}</span>
+                        </a>
+                        {/* <a
                           onClick={(event) => {
                             event.stopPropagation();
                             setInvoiceToDelete(invoice._id);
@@ -233,7 +278,7 @@ const Faturat = () => {
                         >
                           Fshij Faturen
                           <span className="sr-only">, {invoice.name}</span>
-                        </a>
+                        </a> */}
                       </td>
                     </tr>
                   ))}
