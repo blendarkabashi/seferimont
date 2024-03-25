@@ -135,38 +135,42 @@ const index = () => {
                 <dl class="grid sm:flex gap-x-3 text-sm">
                   <dt class="min-w-[150px] max-w-[200px] text-gray-500">Fature per:</dt>
                   <dd class="text-gray-800 ">
-                    <span class="block font-semibold">{invoice.client.fullname}</span>
+                    <span class="block">{invoice.client.fullname}</span>
                   </dd>
                 </dl>
 
                 <dl class="grid sm:flex gap-x-3 text-sm">
                   <dt class="min-w-[150px] max-w-[200px] text-gray-500">Numri i telefonit:</dt>
                   <dd class="text-gray-800 ">
-                    <span class="block font-semibold">{invoice.client.phone_number}</span>
+                    <span class="block ">{invoice.client.phone_number}</span>
                   </dd>
                 </dl>
-                {invoice.plates && (
-                  <dl class="grid sm:flex gap-x-3 text-sm">
-                    <dt class="min-w-[150px] max-w-[200px] text-gray-500">Targat:</dt>
-                    <dd class="text-gray-800 ">
-                      <span class="block font-semibold">{invoice.plates}</span>
-                    </dd>
-                  </dl>
-                )}
+                <dl class="grid sm:flex gap-x-3 text-sm">
+                  <dt class="min-w-[150px] max-w-[200px] text-gray-500">Data e pageses:</dt>
+                  <dd class="font-medium text-gray-800 ">{formatDateString(invoice.due)}</dd>
+                </dl>
               </div>
             </div>
 
             <div>
               <div class="grid space-y-3">
                 <dl class="grid sm:flex gap-x-3 text-sm">
-                  <dt class="min-w-[150px] max-w-[200px] text-gray-500">Numri unik i fatures:</dt>
-                  <dd class="font-medium text-gray-800 ">{id}</dd>
+                  <dt class="min-w-[150px] max-w-[200px] text-gray-500">Lloji i vetures:</dt>
+                  <dd class="font-medium text-gray-800 ">{invoice.car_type}</dd>
                 </dl>
 
                 <dl class="grid sm:flex gap-x-3 text-sm">
-                  <dt class="min-w-[150px] max-w-[200px] text-gray-500">Data e pageses:</dt>
-                  <dd class="font-medium text-gray-800 ">{formatDateString(invoice.due)}</dd>
+                  <dt class="min-w-[150px] max-w-[200px] text-gray-500">Numri i shasise:</dt>
+                  <dd class="font-medium text-gray-800 ">{invoice.vin}</dd>
                 </dl>
+                {invoice.plates && (
+                  <dl class="grid sm:flex gap-x-3 text-sm">
+                    <dt class="min-w-[150px] max-w-[200px] text-gray-500">Targat:</dt>
+                    <dd class="text-gray-800 ">
+                      <span class="block">{invoice.plates}</span>
+                    </dd>
+                  </dl>
+                )}
               </div>
             </div>
           </div>

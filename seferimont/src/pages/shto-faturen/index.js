@@ -21,6 +21,8 @@ const index = () => {
 
   const [loadingInvoice, setLoadingInvoice] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
+  const [carType, setCarType] = useState("");
+  const [VINNumber, setVINNumber] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [plates, setPlates] = useState("");
   const today = new Date();
@@ -255,6 +257,8 @@ const index = () => {
       items: products,
       due: date,
       paid: paidAmount,
+      vin: VINNumber,
+      car_type: carType,
       total: invoiceTotal,
       unpaid: invoiceTotal - paidAmount,
     };
@@ -304,11 +308,41 @@ const index = () => {
                     />
                   </dd>
                 </dl>
+                <dl className="grid sm:flex gap-x-3 text-sm items-center">
+                  <dt className="min-w-[150px] max-w-[200px] text-gray-500 mb-2 sm:mb-0">Data e fundit per pagese:</dt>
+                  <Input
+                    required
+                    onChange={(event) => setDate(event.target.value)}
+                    value={date}
+                    type="date"
+                    placeholder={"10 Jan 2023"}
+                  />
+                </dl>
               </div>
             </div>
 
             <div>
               <div className="grid space-y-3">
+                <dl className="grid sm:flex gap-x-3 text-sm items-center">
+                  <dt className="min-w-[150px] max-w-[200px] text-gray-500 mb-2 sm:mb-0">Lloji i vetures:</dt>
+                  <dd className="text-gray-800 ">
+                    <Input
+                      onChange={(event) => setCarType(event.target.value)}
+                      value={carType}
+                      placeholder={"Shkruaj llojin e vetures"}
+                    />
+                  </dd>
+                </dl>
+                <dl className="grid sm:flex gap-x-3 text-sm items-center">
+                  <dt className="min-w-[150px] max-w-[200px] text-gray-500 mb-2 sm:mb-0">Nr. i shasise:</dt>
+                  <dd className="text-gray-800 ">
+                    <Input
+                      onChange={(event) => setVINNumber(event.target.value)}
+                      value={VINNumber}
+                      placeholder={"Shkruaj numrin e shasise"}
+                    />
+                  </dd>
+                </dl>
                 <dl className="grid sm:flex gap-x-3 text-sm items-center">
                   <dt className="min-w-[150px] max-w-[200px] text-gray-500 mb-2 sm:mb-0">Targat:</dt>
                   <dd className="text-gray-800 ">
@@ -318,16 +352,6 @@ const index = () => {
                       placeholder={"Shkruaj targat e makines"}
                     />
                   </dd>
-                </dl>
-                <dl className="grid sm:flex gap-x-3 text-sm items-center">
-                  <dt className="min-w-[150px] max-w-[200px] text-gray-500 mb-2 sm:mb-0">Data e pageses:</dt>
-                  <Input
-                    required
-                    onChange={(event) => setDate(event.target.value)}
-                    value={date}
-                    type="date"
-                    placeholder={"10 Jan 2023"}
-                  />
                 </dl>
               </div>
             </div>
@@ -350,7 +374,9 @@ const index = () => {
                   required
                   placeholder="Selekto apo krijo nje opsion"
                   isClearable
-                  onChange={(item) => handleProductChange(item, 0)}
+                  onChange={(item) => {
+                    handleProductChange(item, 0);
+                  }}
                   value={products[0].product}
                   options={services}
                   styles={customStyles}
