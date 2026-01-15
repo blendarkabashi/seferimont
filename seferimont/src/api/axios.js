@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://seferimont-backend.vercel.app/",
+  baseURL: "https://sm-backend-rc9ehzhvk-my-team-20db5e78.vercel.app/",
 });
 
 export const initializeAxiosInterceptor = () => {
