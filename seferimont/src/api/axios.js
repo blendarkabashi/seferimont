@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://sm-backend-rc9ehzhvk-my-team-20db5e78.vercel.app/",
+  baseURL: "https://sm-backend-one-ruby.vercel.app/",
 });
 
 export const initializeAxiosInterceptor = () => {
@@ -15,7 +15,7 @@ export const initializeAxiosInterceptor = () => {
     },
     function (error) {
       return Promise.reject(error);
-    }
+    },
   );
 };
 
